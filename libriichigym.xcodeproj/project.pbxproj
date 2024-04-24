@@ -1,0 +1,351 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		71475AAF2BD742D400F44850 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475AAE2BD742D400F44850 /* main.cpp */; };
+		71475AC02BD7534E00F44850 /* riichi_gym.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475ABE2BD7534E00F44850 /* riichi_gym.cpp */; };
+		71475AC32BD7537B00F44850 /* riichi_tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475AC12BD7537B00F44850 /* riichi_tile.cpp */; };
+		71475AC62BD76BA600F44850 /* riichi_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475AC42BD76BA600F44850 /* riichi_util.cpp */; };
+		71475AC92BD776F300F44850 /* riichi_display.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475AC72BD776F300F44850 /* riichi_display.cpp */; };
+		71475ACF2BD7898400F44850 /* riichi_board.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475ACD2BD7898400F44850 /* riichi_board.cpp */; };
+		71475AD52BD7C98500F44850 /* riichi_algo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475AD32BD7C98500F44850 /* riichi_algo.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		71475AA92BD742D400F44850 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		71475AAB2BD742D400F44850 /* libriichigym */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = libriichigym; sourceTree = BUILT_PRODUCTS_DIR; };
+		71475AAE2BD742D400F44850 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		71475ABE2BD7534E00F44850 /* riichi_gym.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = riichi_gym.cpp; sourceTree = "<group>"; };
+		71475ABF2BD7534E00F44850 /* riichi_gym.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = riichi_gym.h; sourceTree = "<group>"; };
+		71475AC12BD7537B00F44850 /* riichi_tile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = riichi_tile.cpp; sourceTree = "<group>"; };
+		71475AC22BD7537B00F44850 /* riichi_tile.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = riichi_tile.hpp; sourceTree = "<group>"; };
+		71475AC42BD76BA600F44850 /* riichi_util.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = riichi_util.cpp; sourceTree = "<group>"; };
+		71475AC52BD76BA600F44850 /* riichi_util.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = riichi_util.hpp; sourceTree = "<group>"; };
+		71475AC72BD776F300F44850 /* riichi_display.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = riichi_display.cpp; sourceTree = "<group>"; };
+		71475AC82BD776F300F44850 /* riichi_display.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = riichi_display.hpp; sourceTree = "<group>"; };
+		71475ACB2BD777B100F44850 /* riichi_config.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = riichi_config.hpp; sourceTree = "<group>"; };
+		71475ACD2BD7898400F44850 /* riichi_board.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = riichi_board.cpp; sourceTree = "<group>"; };
+		71475ACE2BD7898400F44850 /* riichi_board.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = riichi_board.hpp; sourceTree = "<group>"; };
+		71475AD32BD7C98500F44850 /* riichi_algo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = riichi_algo.cpp; sourceTree = "<group>"; };
+		71475AD42BD7C98500F44850 /* riichi_algo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = riichi_algo.hpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		71475AA82BD742D400F44850 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		71475AA22BD742D400F44850 = {
+			isa = PBXGroup;
+			children = (
+				71475AAD2BD742D400F44850 /* libriichigym */,
+				71475AAC2BD742D400F44850 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		71475AAC2BD742D400F44850 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				71475AAB2BD742D400F44850 /* libriichigym */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		71475AAD2BD742D400F44850 /* libriichigym */ = {
+			isa = PBXGroup;
+			children = (
+				71475ABD2BD7442800F44850 /* auxs */,
+				71475AB52BD7430200F44850 /* include */,
+				71475ABC2BD7441F00F44850 /* core */,
+				71475AAE2BD742D400F44850 /* main.cpp */,
+			);
+			path = libriichigym;
+			sourceTree = "<group>";
+		};
+		71475AB52BD7430200F44850 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				71475ABF2BD7534E00F44850 /* riichi_gym.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		71475ABC2BD7441F00F44850 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				71475ABE2BD7534E00F44850 /* riichi_gym.cpp */,
+				71475ACB2BD777B100F44850 /* riichi_config.hpp */,
+				71475AC42BD76BA600F44850 /* riichi_util.cpp */,
+				71475AC52BD76BA600F44850 /* riichi_util.hpp */,
+				71475AC12BD7537B00F44850 /* riichi_tile.cpp */,
+				71475AC22BD7537B00F44850 /* riichi_tile.hpp */,
+				71475AC72BD776F300F44850 /* riichi_display.cpp */,
+				71475AC82BD776F300F44850 /* riichi_display.hpp */,
+				71475ACD2BD7898400F44850 /* riichi_board.cpp */,
+				71475ACE2BD7898400F44850 /* riichi_board.hpp */,
+				71475AD32BD7C98500F44850 /* riichi_algo.cpp */,
+				71475AD42BD7C98500F44850 /* riichi_algo.hpp */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
+		71475ABD2BD7442800F44850 /* auxs */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = auxs;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		71475AAA2BD742D400F44850 /* libriichigym */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 71475AB22BD742D400F44850 /* Build configuration list for PBXNativeTarget "libriichigym" */;
+			buildPhases = (
+				71475AA72BD742D400F44850 /* Sources */,
+				71475AA82BD742D400F44850 /* Frameworks */,
+				71475AA92BD742D400F44850 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libriichigym;
+			productName = libriichigym;
+			productReference = 71475AAB2BD742D400F44850 /* libriichigym */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		71475AA32BD742D400F44850 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1530;
+				TargetAttributes = {
+					71475AAA2BD742D400F44850 = {
+						CreatedOnToolsVersion = 15.3;
+					};
+				};
+			};
+			buildConfigurationList = 71475AA62BD742D400F44850 /* Build configuration list for PBXProject "libriichigym" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 71475AA22BD742D400F44850;
+			productRefGroup = 71475AAC2BD742D400F44850 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				71475AAA2BD742D400F44850 /* libriichigym */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		71475AA72BD742D400F44850 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71475ACF2BD7898400F44850 /* riichi_board.cpp in Sources */,
+				71475AAF2BD742D400F44850 /* main.cpp in Sources */,
+				71475AC62BD76BA600F44850 /* riichi_util.cpp in Sources */,
+				71475AD52BD7C98500F44850 /* riichi_algo.cpp in Sources */,
+				71475AC92BD776F300F44850 /* riichi_display.cpp in Sources */,
+				71475AC32BD7537B00F44850 /* riichi_tile.cpp in Sources */,
+				71475AC02BD7534E00F44850 /* riichi_gym.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		71475AB02BD742D400F44850 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++23";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		71475AB12BD742D400F44850 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++23";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		71475AB32BD742D400F44850 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 923Q86W73B;
+				ENABLE_HARDENED_RUNTIME = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		71475AB42BD742D400F44850 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 923Q86W73B;
+				ENABLE_HARDENED_RUNTIME = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		71475AA62BD742D400F44850 /* Build configuration list for PBXProject "libriichigym" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				71475AB02BD742D400F44850 /* Debug */,
+				71475AB12BD742D400F44850 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		71475AB22BD742D400F44850 /* Build configuration list for PBXNativeTarget "libriichigym" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				71475AB32BD742D400F44850 /* Debug */,
+				71475AB42BD742D400F44850 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 71475AA32BD742D400F44850 /* Project object */;
+}
