@@ -31,6 +31,7 @@ static riichi_gym_actiongroup_t convert_to_c_actiongroup(const riichi::ActionGro
 }
 
 
+// MARK: - Extern
 riichi_gym_board_t* riichi_gym_board_malloc() {
     riichi::Board* board = new riichi::Board();
     return reinterpret_cast<riichi_gym_board_t*>(board);
@@ -44,14 +45,22 @@ riichi_gym_board_t* riichi_gym_board_malloc_with_seed(unsigned int seed) {
 
 
 void riichi_gym_board_free(riichi_gym_board_t* board) {
-    delete reinterpret_cast<riichi::Board*>(board);
+    if (board != nullptr) {
+        delete reinterpret_cast<riichi::Board*>(board);
+    }
 }
 
 
 riichi_gym_actiongroup_t riichi_gym_board_request(riichi_gym_board_t* board) {
-    return convert_to_c_actiongroup(reinterpret_cast<riichi::Board*>(board)->request());
+    if (board != nullptr) {
+        return convert_to_c_actiongroup(reinterpret_cast<riichi::Board*>(board)->request());
+    } else {
+        return {};
+    }
 }
 
 void riichi_gym_board_respound(riichi_gym_board_t* board, riichi_gym_actiongroup_t actiongroup) {
-    reinterpret_cast<riichi::Board*>(board)->response(convert_to_cpp_actiongroup(actiongroup));
+    if (board != nullptr) {
+        reinterpret_cast<riichi::Board*>(board)->response(convert_to_cpp_actiongroup(actiongroup));
+    }
 }

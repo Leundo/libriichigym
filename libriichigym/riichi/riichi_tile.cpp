@@ -13,7 +13,7 @@
 
 namespace riichi {
 
-static const char tile_descriptions[] = "u\0\01m\02m\03m\04m\05m\06m\07m\08m\09m\01s\02s\03s\04s\05s\06s\07s\08s\09s\01p\02p\03p\04p\05p\06p\07p\08p\09p\0e\0\0s\0\0w\0\0n\0\0p\0\0f\0\0c\0\0mr\0sr\0pr";
+static const char tile_descriptions[] = "u\0\0" "1m\0" "2m\0" "3m\0" "4m\0" "5m\0" "6m\0" "7m\0" "8m\0" "9m\0" "1s\0" "2s\0" "3s\0" "4s\0" "5s\0" "6s\0" "7s\0" "8s\0" "9s\0" "1p\0" "2p\0" "3p\0" "4p\0" "5p\0" "6p\0" "7p\0" "8p\0" "9p\0" "e\0\0" "s\0\0" "w\0\0" "n\0\0" "p\0\0" "f\0\0" "c\0\0" "mr\0" "sr\0" "pr";
 
 
 // MARK: - Tile
@@ -37,7 +37,7 @@ const char* tile_describe(Tile tile) noexcept {
     if (tile_is_undefined(tile)) {
         return tile_descriptions;
     }
-    return &tile_descriptions[(std::to_underlying(tile) + 1) * 3];
+    return &tile_descriptions[(static_cast<uint8_t>(tile) + 1) * 3];
 }
 
 

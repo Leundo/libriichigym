@@ -19,7 +19,7 @@ Board::Cache::Cache() noexcept {
 
 // MARK: - Board
 Board::Board(std::optional<unsigned int> seed) noexcept {
-    this->seed = seed.value_or(std::random_device{}()) % 0x1000000000000;
+    this->seed = seed.value_or(std::random_device{}());
     random_generator = std::mt19937(this->seed);
     
     session = 0;
@@ -107,7 +107,7 @@ ActionGroup Board::request() noexcept {
             }
             case Stage::SEKAN: {
                 if (board_can_sekan(*this)) {
-                    group.set(current_player, hold_tile, ActionKind::CLOSED_KAN);
+                    group.set(current_player, hold_tile, ActionKind::SELF_KAN);
                     return group;
                 } else {
                     stage = Stage::RIICHI;

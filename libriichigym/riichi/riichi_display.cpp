@@ -122,6 +122,14 @@ Tile Mountain::indora_tile(Offset<uint8_t> i) const noexcept {
     return indora_span[i];
 }
 
+uint8_t Mountain::remaining_draw_count() const noexcept {
+    return draw_span.size() - draw_curr;
+}
+
+uint8_t Mountain::dora_visible_count() const noexcept {
+    return dora_curr;
+}
+
 
 // MARK: - Shrine
 

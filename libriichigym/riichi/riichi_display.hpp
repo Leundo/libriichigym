@@ -181,6 +181,9 @@ public:
     Tile outdora_tile(Offset<uint8_t> i) const noexcept;
     Tile indora_tile(Offset<uint8_t> i) const noexcept;
     
+    uint8_t remaining_draw_count() const noexcept;
+    uint8_t dora_visible_count() const noexcept;
+    
     Tile draw(bool is_from_rinshan) noexcept;
 };
 
@@ -294,16 +297,15 @@ public:
 
 // MARK: - Action
 enum class ActionKind: uint8_t {
-    DISCARD = 0,
-    RIICHI = 1,
-    PON = 2,
-    CHI = 3,
-    OPEN_KAN = 4,
-    ADD_KAN = 5,
-    CLOSED_KAN = 6,
-    AGARI = 7,
-    ABORT = 8,
-    UND = 9,
+    DISCARD,
+    RIICHI,
+    PON,
+    CHI,
+    OPEN_KAN,
+    SELF_KAN,
+    AGARI,
+    ABORT,
+    UND,
 };
 
 bool actionKind_is_undefined(ActionKind actionkind) noexcept;
