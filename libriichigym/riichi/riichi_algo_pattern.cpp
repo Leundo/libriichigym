@@ -3277,7 +3277,7 @@ static const uint32_t patterns[] = {
 ((u32 & 0x80000000) == 0)
 
 
-const uint32_t* find_values_from_patterns(uint32_t key) {
+const uint32_t* find_values_from_patterns(uint32_t key) noexcept {
     const uint16_t key_upper_bound = ((COUNT_OF(patterns) - 1) / 2) - 1;
     int16_t left = 0, right = key_upper_bound - 2;
     

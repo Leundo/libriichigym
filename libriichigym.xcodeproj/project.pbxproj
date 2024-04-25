@@ -17,6 +17,7 @@
 		71475AD82BD93BFE00F44850 /* riichi_ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475AD62BD93BFE00F44850 /* riichi_ui.cpp */; };
 		71475ADC2BD9D8F000F44850 /* riichi_cheater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475ADA2BD9D8F000F44850 /* riichi_cheater.cpp */; };
 		71475ADE2BD9F53200F44850 /* riichi_algo_pattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475ADD2BD9F53200F44850 /* riichi_algo_pattern.cpp */; };
+		71475AE12BDA8F2900F44850 /* riichi_score.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475ADF2BDA8F2900F44850 /* riichi_score.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -52,6 +53,8 @@
 		71475ADA2BD9D8F000F44850 /* riichi_cheater.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = riichi_cheater.cpp; sourceTree = "<group>"; };
 		71475ADB2BD9D8F000F44850 /* riichi_cheater.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = riichi_cheater.h; sourceTree = "<group>"; };
 		71475ADD2BD9F53200F44850 /* riichi_algo_pattern.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = riichi_algo_pattern.cpp; sourceTree = "<group>"; };
+		71475ADF2BDA8F2900F44850 /* riichi_score.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = riichi_score.cpp; sourceTree = "<group>"; };
+		71475AE02BDA8F2900F44850 /* riichi_score.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = riichi_score.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +121,8 @@
 				71475AD32BD7C98500F44850 /* riichi_algo.cpp */,
 				71475AD42BD7C98500F44850 /* riichi_algo.hpp */,
 				71475ADD2BD9F53200F44850 /* riichi_algo_pattern.cpp */,
+				71475ADF2BDA8F2900F44850 /* riichi_score.cpp */,
+				71475AE02BDA8F2900F44850 /* riichi_score.hpp */,
 			);
 			path = riichi;
 			sourceTree = "<group>";
@@ -198,6 +203,7 @@
 				71475AC92BD776F300F44850 /* riichi_display.cpp in Sources */,
 				71475AC32BD7537B00F44850 /* riichi_tile.cpp in Sources */,
 				71475AC02BD7534E00F44850 /* riichi_gym.cpp in Sources */,
+				71475AE12BDA8F2900F44850 /* riichi_score.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

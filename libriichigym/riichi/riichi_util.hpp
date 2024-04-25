@@ -102,6 +102,10 @@ public:
     return ::riichi::ConstexprString<::riichi::ConstexprStringContainer<typename decltype(s)::value_type, s.size()> {str}> {};}\
 ())
 
+
+template<class... Ts> struct Visitor: Ts... { using Ts::operator()...; };
+template<class... Ts> Visitor(Ts...) -> Visitor<Ts...>;
+
 }
 
 #endif /* riichi_util_hpp */
