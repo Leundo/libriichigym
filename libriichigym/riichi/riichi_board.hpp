@@ -78,11 +78,12 @@ public:
         }
     };
     
-    Board(std::optional<unsigned int> seed = {}) noexcept;
+    Board(std::optional<unsigned int> seed = {}, std::optional<std::function<void(Mountain&, std::mt19937&)>> shuffle = {}) noexcept;
     ~Board() noexcept = default;
     
     unsigned int seed;
     std::mt19937 random_generator;
+    std::function<void(Mountain&, std::mt19937&)> shuffle;
     
     
     uint8_t session;

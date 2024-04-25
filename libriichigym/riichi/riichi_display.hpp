@@ -169,13 +169,18 @@ public:
     ~Mountain() noexcept = default;
     
     std::array<Tile, MOUNTAIN_TILE_COUNT> tiles;
-    std::span<Tile> draw_span;
-    std::span<Tile> rinshan_span;
-    std::span<Tile> outdora_span;
-    std::span<Tile> indora_span;
     Offset<uint8_t> draw_curr;
     Offset<uint8_t> rinshan_curr;
     Offset<uint8_t> dora_curr;
+    
+    constexpr static Offset<uint8_t> draw_begin = 0;
+    constexpr static Offset<uint8_t> draw_end = MOUNTAIN_TILE_COUNT - RIICHI_GYM_KAN_UPPER_LIMIT - 2 * RIICHI_GYM_DORA_UPPER_LIMIT;
+    constexpr static Offset<uint8_t> rinshan_begin = MOUNTAIN_TILE_COUNT - RIICHI_GYM_KAN_UPPER_LIMIT - 2 * RIICHI_GYM_DORA_UPPER_LIMIT;
+    constexpr static Offset<uint8_t> rinshan_end = MOUNTAIN_TILE_COUNT - 2 * RIICHI_GYM_DORA_UPPER_LIMIT;
+    constexpr static Offset<uint8_t> outdora_begin = MOUNTAIN_TILE_COUNT - 2 * RIICHI_GYM_DORA_UPPER_LIMIT;
+    constexpr static Offset<uint8_t> outdora_end = MOUNTAIN_TILE_COUNT - RIICHI_GYM_DORA_UPPER_LIMIT;
+    constexpr static Offset<uint8_t> indora_begin = MOUNTAIN_TILE_COUNT - RIICHI_GYM_DORA_UPPER_LIMIT;
+    constexpr static Offset<uint8_t> indora_end = MOUNTAIN_TILE_COUNT;
     
     bool can_draw() const noexcept;
     Tile outdora_tile(Offset<uint8_t> i) const noexcept;

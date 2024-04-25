@@ -88,11 +88,6 @@ Mountain::Mountain() noexcept {
         Tile::C, Tile::C, Tile::C, Tile::C,
     };
     
-    draw_span = std::span<Tile>(tiles.begin(), MOUNTAIN_TILE_COUNT - RIICHI_GYM_KAN_UPPER_LIMIT - 2 * RIICHI_GYM_DORA_UPPER_LIMIT);
-    rinshan_span = std::span<Tile>(tiles.begin() + MOUNTAIN_TILE_COUNT - RIICHI_GYM_KAN_UPPER_LIMIT - 2 * RIICHI_GYM_DORA_UPPER_LIMIT, RIICHI_GYM_KAN_UPPER_LIMIT);
-    indora_span = std::span<Tile>(tiles.begin() + MOUNTAIN_TILE_COUNT - 2 * RIICHI_GYM_DORA_UPPER_LIMIT, RIICHI_GYM_DORA_UPPER_LIMIT);
-    outdora_span = std::span<Tile>(tiles.begin() + MOUNTAIN_TILE_COUNT - RIICHI_GYM_DORA_UPPER_LIMIT, RIICHI_GYM_DORA_UPPER_LIMIT);
-    
     draw_curr = 0;
     rinshan_curr = 0;
     dora_curr = 1;
@@ -101,29 +96,29 @@ Mountain::Mountain() noexcept {
 Tile Mountain::draw(bool is_from_rinshan) noexcept {
     Tile tile;
     if (!is_from_rinshan) {
-        tile = draw_span[draw_curr];
+        tile = tiles[draw_curr + Mountain::draw_begin];
         draw_curr += 1;
     } else {
-        tile = rinshan_span[rinshan_curr];
+        tile = tiles[rinshan_curr + Mountain::rinshan_begin];
         rinshan_curr += 1;
     }
     return tile;
 }
 
 bool Mountain::can_draw() const noexcept {
-    return draw_curr < draw_span.size();
+    return draw_curr < (Mountain::draw_end - Mountain::draw_begin);
 };
 
 Tile Mountain::outdora_tile(Offset<uint8_t> i) const noexcept {
-    return outdora_span[i];
+    return tiles[i + Mountain::outdora_begin];
 }
 
 Tile Mountain::indora_tile(Offset<uint8_t> i) const noexcept {
-    return indora_span[i];
+    return tiles[i + Mountain::indora_begin];
 }
 
 uint8_t Mountain::remaining_draw_count() const noexcept {
-    return draw_span.size() - draw_curr;
+    return Mountain::draw_end - Mountain::draw_begin - draw_curr;
 }
 
 uint8_t Mountain::dora_visible_count() const noexcept {

@@ -18,9 +18,12 @@ Board::Cache::Cache() noexcept {
 
 
 // MARK: - Board
-Board::Board(std::optional<unsigned int> seed) noexcept {
+Board::Board(std::optional<unsigned int> seed, std::optional<std::function<void(Mountain&, std::mt19937&)>> shuffle) noexcept {
     this->seed = seed.value_or(std::random_device{}());
     random_generator = std::mt19937(this->seed);
+    this->shuffle = shuffle.value_or([](Mountain& mountain, std::mt19937& generator) noexcept -> void {
+//        mountain
+    });
     
     session = 0;
     honba = 0;
@@ -28,10 +31,10 @@ Board::Board(std::optional<unsigned int> seed) noexcept {
     tribute = 0;
     scores.fill(RIICHI_GYM_INITIAL_SCORE);
     
-    mountain = Mountain();
-    river = River();
-    shrine = Shrine();
-    hands.fill(Hand());
+//    mountain = Mountain();
+//    river = River();
+//    shrine = Shrine();
+//    hands.fill(Hand());
     
     current_player = Player::P0;
     stage = Stage::PREPARE;
@@ -62,6 +65,7 @@ ActionGroup Board::request() noexcept {
                 cache = Cache();
                 
                 tiles_shuffle(mountain.tiles.begin(), mountain.tiles.size(), random_generator);
+
                 
                 for (uint8_t i = 0; i < PLAYER_COUNT; i++) {
                     for (uint8_t j = 0; j < 13; j++) {
