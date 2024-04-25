@@ -273,6 +273,11 @@ void riichi_gym_wait_actiongroup_input(riichi_gym_actiongroup_t* group) {
                 goto next_token_parse;
             }
         }
+        if (riichi::strncmpci(token, riichi::tile_describe(riichi::Tile::UND), 2) == 0) {
+            group->tiles[player] = static_cast<uint8_t>(riichi::Tile::UND);
+            input_tile = static_cast<uint8_t>(riichi::Tile::UND);
+            goto next_token_parse;
+        }
         break;
     next_token_parse:
         player += 1;
