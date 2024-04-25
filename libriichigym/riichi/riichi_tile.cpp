@@ -189,6 +189,15 @@ uint8_t tilekind_cycle(TileKind tilekind) noexcept {
 }
 
 
+uint8_t tilekind_to(TileKind tileKind) noexcept {
+    return static_cast<uint8_t>(tileKind);
+}
+
+TileKind tilekind_from(uint8_t tileKind) noexcept {
+    return static_cast<TileKind>(tileKind);
+}
+
+
 bool tilekind_is_undefined(TileKind tilekind) noexcept {
     return tilekind > TILEKIND_LAST;
 }

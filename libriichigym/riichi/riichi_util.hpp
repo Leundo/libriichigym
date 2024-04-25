@@ -10,6 +10,7 @@
 
 #include <string_view>
 #include <utility>
+#include <bitset>
 #include <concepts>
 #include <cstdint>
 
@@ -22,6 +23,22 @@ namespace riichi {
 
 #define unlikely(x) __builtin_expect(!!(x), 0)
 
+
+template<class T>
+using Offset = T;
+
+template<typename T, typename... Types>
+concept AllMatching = (... && std::is_same<T, Types>::value);
+
+template<typename T, typename... Types>
+concept AnyMatching = (... || std::is_same<T, Types>::value);
+
+template<typename T>
+concept UnsignedInteger = std::unsigned_integral<T>;
+
+
+
+// MARK: - Bit Tool
 
 #define uoptset_insert(set, value)\
 do { *(set) |= (1u << (value)); } while(0)
@@ -38,18 +55,29 @@ do { *(set) &= ~(1u << (value)); } while(0)
 #define uoptset_extract(set, size, trailing)\
 (((~(~0u << (size)) << (trailing)) & set) >> (trailing))
 
+#define underlie(enum_value)\
+(std::to_underlying(enum_value))
 
-template<class T>
-using Offset = T;
+constexpr uint64_t u64_make_containing() {
+    return 0;
+}
 
-template<typename T, typename... Types>
-concept AllMatching = (... && std::is_same<T, Types>::value);
+template <UnsignedInteger T, UnsignedInteger ... Args>
+constexpr uint64_t u64_make_containing(T first, Args ... args) {
+    return (1u << first) | u64_make_containing(args...);
+}
 
-template<typename T, typename... Types>
-concept AnyMatching = (... || std::is_same<T, Types>::value);
 
+template<unsigned int N>
+constexpr std::bitset<N> bitset_make_containing() {
+    return 0;
+}
 
-int strncmpci(const char * lhs, const char * rhs, size_t num);
+template<unsigned int N, UnsignedInteger T, UnsignedInteger ... Args>
+constexpr std::bitset<N> bitset_make_containing(T first, Args ... args) {
+    std::bitset<N> value = 1u << first;
+    return value | bitset_make_containing<N>(args...);
+}
 
 
 
@@ -101,6 +129,9 @@ public:
 ([]{constexpr std::basic_string_view s{str};\
     return ::riichi::ConstexprString<::riichi::ConstexprStringContainer<typename decltype(s)::value_type, s.size()> {str}> {};}\
 ())
+
+
+int strncmpci(const char * lhs, const char * rhs, size_t num);
 
 
 template<class... Ts> struct Visitor: Ts... { using Ts::operator()...; };

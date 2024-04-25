@@ -140,7 +140,6 @@ struct PenaltyPoint {
     int32_t punter_rong = 0;
     int32_t punter_tumo_from_punter = 0;
     int32_t punter_tumo_from_dealer = 0;
-    
 };
 
 bool operator == (const PenaltyPoint& lhs, const PenaltyPoint& rhs) noexcept;

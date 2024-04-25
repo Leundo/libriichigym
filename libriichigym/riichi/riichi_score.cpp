@@ -265,6 +265,54 @@ static YakuCombo calculate_chiitoitsu_yakucombo(const Board& board, ChiitoitsuAr
     YakuCombo yakucombo;
     arrangement->yakus.set(yakukind_to(YakuKind::CHIITOITSU));
     
+    if (board.move < 4 && agarievent == AgariEvent::TUMO && board.shrine.last_cexposed(player) == nullptr) {
+        if (board.move == 0) {
+            arrangement->yakus.set(yakukind_to(YakuKind::TENHOU));
+        } else {
+            arrangement->yakus.set(yakukind_to(YakuKind::CHIIHOU));
+        }
+    }
+    
+    std::bitset<TILEKIND_COUNT> any_is_tilekinds = 0;
+    bool any_is_yaochuuhai = false;
+    bool all_are_yaochuuhai = true;
+    
+    
+    for (TileKind kind: TILEKIND_CASES) {
+        uint8_t cycle = tilekind_cycle(kind);
+        Tile first_tile = tilekind_first_tile(kind);
+        for (uint8_t i = 0; i < cycle; i++) {
+            Tile tile = tile_add(first_tile, i);
+            uint8_t count = board.chand(player).count_ignoring_level(tile);
+            if (count <= 0) {
+                continue;
+            }
+            
+            if (tile_is_yaochuuhai(tile)) {
+                any_is_yaochuuhai = true;
+            } else {
+                all_are_yaochuuhai = false;
+            }
+            any_is_tilekinds.set(tilekind_to(kind));
+        }
+    }
+
+    
+    if ((any_is_tilekinds & bitset_make_containing<TILEKIND_COUNT>(underlie(TileKind::MAN), underlie(TileKind::SOU), underlie(TileKind::PIN))) == 0) {
+        arrangement->yakus.set(yakukind_to(YakuKind::TSUUIISOU));
+    }
+    if (all_are_yaochuuhai) {
+        arrangement->yakus.set(yakukind_to(YakuKind::HONROUTOU));
+    }
+    if (!any_is_yaochuuhai) {
+        arrangement->yakus.set(yakukind_to(YakuKind::TANYAO));
+    }
+    
+    if ((any_is_tilekinds & bitset_make_containing<TILEKIND_COUNT>(underlie(TileKind::WIND), underlie(TileKind::SAN))) == 0 && any_is_tilekinds.count() == 1) {
+        arrangement->yakus.set(yakukind_to(YakuKind::CHINITSU));
+    } else if ((any_is_tilekinds & bitset_make_containing<TILEKIND_COUNT>(underlie(TileKind::MAN), underlie(TileKind::SOU), underlie(TileKind::PIN))).count() == 1) {
+        arrangement->yakus.set(yakukind_to(YakuKind::HONITSU));
+    }
     
     yakucombo.is_nil = false;
     yakucombo.arrangement = *arrangement;

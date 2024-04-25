@@ -112,6 +112,7 @@ enum class TileKind: uint8_t {
 
 constexpr TileKind TILEKIND_FIRST = TileKind::MAN;
 constexpr TileKind TILEKIND_LAST = TileKind::SAN;
+constexpr uint8_t TILEKIND_COUNT = 5;
 #define TILEKIND_CASES {::riichi::TileKind::MAN, ::riichi::TileKind::SOU, ::riichi::TileKind::PIN, ::riichi::TileKind::WIND, ::riichi::TileKind::SAN }
 
 
@@ -122,6 +123,8 @@ Tile tile_make(TileKind, uint8_t) noexcept;
 Tile tilekind_first_tile(TileKind) noexcept;
 uint8_t tilekind_cycle(TileKind) noexcept;
 
+uint8_t tilekind_to(TileKind) noexcept;
+TileKind tilekind_from(uint8_t) noexcept;
 
 bool tilekind_is_undefined(TileKind) noexcept;
 bool tilekind_is_jihai(TileKind) noexcept;
