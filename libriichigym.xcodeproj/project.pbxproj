@@ -15,6 +15,7 @@
 		71475ACF2BD7898400F44850 /* riichi_board.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475ACD2BD7898400F44850 /* riichi_board.cpp */; };
 		71475AD52BD7C98500F44850 /* riichi_algo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475AD32BD7C98500F44850 /* riichi_algo.cpp */; };
 		71475AD82BD93BFE00F44850 /* riichi_ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475AD62BD93BFE00F44850 /* riichi_ui.cpp */; };
+		71475ADC2BD9D8F000F44850 /* riichi_cheater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475ADA2BD9D8F000F44850 /* riichi_cheater.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,6 +48,8 @@
 		71475AD42BD7C98500F44850 /* riichi_algo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = riichi_algo.hpp; sourceTree = "<group>"; };
 		71475AD62BD93BFE00F44850 /* riichi_ui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = riichi_ui.cpp; sourceTree = "<group>"; };
 		71475AD72BD93BFE00F44850 /* riichi_ui.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = riichi_ui.h; sourceTree = "<group>"; };
+		71475ADA2BD9D8F000F44850 /* riichi_cheater.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = riichi_cheater.cpp; sourceTree = "<group>"; };
+		71475ADB2BD9D8F000F44850 /* riichi_cheater.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = riichi_cheater.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +94,7 @@
 			children = (
 				71475ABF2BD7534E00F44850 /* riichi_gym.h */,
 				71475AD72BD93BFE00F44850 /* riichi_ui.h */,
+				71475ADB2BD9D8F000F44850 /* riichi_cheater.h */,
 			);
 			path = include;
 			sourceTree = "<group>";
@@ -119,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				71475AD62BD93BFE00F44850 /* riichi_ui.cpp */,
+				71475ADA2BD9D8F000F44850 /* riichi_cheater.cpp */,
 			);
 			path = auxs;
 			sourceTree = "<group>";
@@ -180,6 +185,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71475ADC2BD9D8F000F44850 /* riichi_cheater.cpp in Sources */,
 				71475ACF2BD7898400F44850 /* riichi_board.cpp in Sources */,
 				71475AAF2BD742D400F44850 /* main.cpp in Sources */,
 				71475AC62BD76BA600F44850 /* riichi_util.cpp in Sources */,

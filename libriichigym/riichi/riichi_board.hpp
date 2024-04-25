@@ -92,10 +92,10 @@ public:
     uint8_t tribute;
     std::array<int32_t, PLAYER_UPPER_COUNT> scores;
     
-    Mountain mountain;
-    River river;
-    Shrine shrine;
-    std::array<Hand, PLAYER_UPPER_COUNT> hands;
+    Mountain mountain = {};
+    River river = {};
+    Shrine shrine = {};
+    std::array<Hand, PLAYER_UPPER_COUNT> hands = {};
     
     Player current_player;
     Stage stage;

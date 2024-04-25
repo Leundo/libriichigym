@@ -8,10 +8,12 @@
 #include <iostream>
 #include "riichi_gym.h"
 #include "riichi_ui.h"
+#include "riichi_cheater.h"
 
 
 int main(int argc, const char * argv[]) {
     riichi_gym_board_t* board = riichi_gym_board_malloc();
+    riichi_gym_board_false_shuffle(board, 1);
     
     while(true) {
         riichi_gym_actiongroup_t group = riichi_gym_board_request(board);

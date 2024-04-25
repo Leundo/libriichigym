@@ -22,7 +22,7 @@ Board::Board(std::optional<unsigned int> seed, std::optional<std::function<void(
     this->seed = seed.value_or(std::random_device{}());
     random_generator = std::mt19937(this->seed);
     this->shuffle = shuffle.value_or([](Mountain& mountain, std::mt19937& generator) noexcept -> void {
-//        mountain
+        tiles_shuffle(mountain.tiles.begin(), mountain.tiles.size(), generator);
     });
     
     session = 0;
@@ -31,10 +31,6 @@ Board::Board(std::optional<unsigned int> seed, std::optional<std::function<void(
     tribute = 0;
     scores.fill(RIICHI_GYM_INITIAL_SCORE);
     
-//    mountain = Mountain();
-//    river = River();
-//    shrine = Shrine();
-//    hands.fill(Hand());
     
     current_player = Player::P0;
     stage = Stage::PREPARE;
@@ -64,9 +60,8 @@ ActionGroup Board::request() noexcept {
                 move = 0;
                 cache = Cache();
                 
-                tiles_shuffle(mountain.tiles.begin(), mountain.tiles.size(), random_generator);
+                shuffle(mountain, random_generator);
 
-                
                 for (uint8_t i = 0; i < PLAYER_COUNT; i++) {
                     for (uint8_t j = 0; j < 13; j++) {
                         Tile tile = mountain.draw(false);
@@ -253,7 +248,7 @@ void Board::response(const ActionGroup& group) noexcept {
         case Stage::LOOT: {
             auto actables = group.tiles_nonundefineds();
             actables &= action_permission;
-            if (actables.any()) {
+            if (!actables.any()) {
                 stage = Stage::MAIN_DISCARD;
             } else {
                 // TODO:
@@ -263,7 +258,7 @@ void Board::response(const ActionGroup& group) noexcept {
         case Stage::RONG: {
             auto actables = group.tiles_nonundefineds();
             actables &= action_permission;
-            if (actables.any()) {
+            if (!actables.any()) {
                 stage = Stage::KAN;
             } else {
                 // TODO:
@@ -273,12 +268,12 @@ void Board::response(const ActionGroup& group) noexcept {
         case Stage::KAN: {
             auto actables = group.tiles_nonundefineds();
             actables &= action_permission;
-            if (actables.any()) {
+            if (!actables.any()) {
                 stage = Stage::PON;
                 break;
             }
             Player trigger = current_player;
-            Player actor = static_cast<Player>(ffsl(actables.to_ulong()));
+            Player actor = static_cast<Player>(ffsl(actables.to_ulong()) - 1);
             if (tile_downgrade(group.get_tile(actor)) != tile_downgrade(drop_tile)) {
                 stage = Stage::PON;
                 break;
@@ -311,12 +306,12 @@ void Board::response(const ActionGroup& group) noexcept {
         case Stage::PON: {
             auto actables = group.tiles_nonundefineds();
             actables &= action_permission;
-            if (actables.any()) {
+            if (!actables.any()) {
                 stage = Stage::CHI;
                 break;
             }
             Player trigger = current_player;
-            Player actor = static_cast<Player>(ffsl(actables.to_ulong()));
+            Player actor = static_cast<Player>(ffsl(actables.to_ulong()) - 1);
             Tile action_tile = group.get_tile(actor);
             if (tile_downgrade(action_tile) != tile_downgrade(drop_tile)) {
                 stage = Stage::CHI;
@@ -371,13 +366,13 @@ void Board::response(const ActionGroup& group) noexcept {
         case Stage::CHI: {
             auto actables = group.tiles_nonundefineds();
             actables &= action_permission;
-            if (actables.any()) {
+            if (!actables.any()) {
                 current_player = player_cycle_next(current_player);
                 stage = Stage::DRAW;
                 break;
             }
             Player trigger = current_player;
-            Player actor = static_cast<Player>(ffsl(actables.to_ulong()));
+            Player actor = static_cast<Player>(ffsl(actables.to_ulong()) - 1);
             Tile action_tile = group.get_tile(actor);
             if (tile_is_undefined(action_tile) || action_tip[static_cast<uint8_t>(action_tile)] == false) {
                 current_player = player_cycle_next(current_player);
