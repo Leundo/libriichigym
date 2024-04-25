@@ -76,6 +76,13 @@ Tile tile_upgrade(Tile) noexcept;
 uint8_t tile_digit(Tile) noexcept;
 
 
+Tile tile_add(Tile, uint8_t) noexcept;
+Tile tile_sub(Tile, uint8_t) noexcept;
+uint8_t tile_to(Tile) noexcept;
+Tile tile_from(uint8_t) noexcept;
+
+
+
 Tile tile_cycle_next(Tile) noexcept;
 Tile tile_cycle_prev(Tile) noexcept;
 Tile tile_linear_next(Tile) noexcept;
@@ -84,6 +91,7 @@ Tile tile_linear_prev(Tile) noexcept;
 
 bool tile_is_jihai(Tile) noexcept;
 bool tile_is_suuhai(Tile) noexcept;
+bool tile_is_yaochuuhai(Tile) noexcept;
 
 
 template<class URBG>
@@ -104,6 +112,7 @@ enum class TileKind: uint8_t {
 
 constexpr TileKind TILEKIND_FIRST = TileKind::MAN;
 constexpr TileKind TILEKIND_LAST = TileKind::SAN;
+#define TILEKIND_CASES {::riichi::TileKind::MAN, ::riichi::TileKind::SOU, ::riichi::TileKind::PIN, ::riichi::TileKind::WIND, ::riichi::TileKind::SAN }
 
 
 TileKind tile_kind(Tile) noexcept;

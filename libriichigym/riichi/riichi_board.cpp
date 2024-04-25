@@ -467,7 +467,7 @@ void Board::response(const ActionGroup& group) noexcept {
             discarded->tile = discarded_tile;
             discarded->move = move;
             discarded->owner = current_player;
-            discarded->is_onriichi = last_discarded == NULL ? false : last_discarded->is_onriichi;
+            discarded->is_onriichi = last_discarded == nullptr ? false : last_discarded->is_onriichi;
             discarded->kiri = kiri;
             discarded->naki = Naki::UND;
             

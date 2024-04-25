@@ -16,16 +16,18 @@
 
 namespace riichi {
 
+#define COUNT_OF(x) ((sizeof(x)/sizeof(0[x])) / ((size_t)(!(sizeof(x) % sizeof(0[x])))))
+
 #define likely(x) __builtin_expect(!!(x), 1)
 
 #define unlikely(x) __builtin_expect(!!(x), 0)
 
 
 #define uoptset_insert(set, value)\
-do { *(set) |= (1u << (value)); } while(1)
+do { *(set) |= (1u << (value)); } while(0)
 
 #define uoptset_remove(set, value)\
-do { *(set) &= ~(1u << (value)); } while(1)
+do { *(set) &= ~(1u << (value)); } while(0)
 
 #define uoptset_contain(set, value)\
 ((set & (1u << (value))) != 0)

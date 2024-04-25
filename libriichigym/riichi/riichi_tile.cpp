@@ -101,6 +101,23 @@ Tile tile_make(TileKind kind, uint8_t digit) noexcept {
 }
 
 
+Tile tile_add(Tile tile, uint8_t num) noexcept {
+    return static_cast<Tile>(static_cast<uint8_t>(tile) + num);
+}
+
+Tile tile_sub(Tile tile, uint8_t num) noexcept {
+    return static_cast<Tile>(static_cast<uint8_t>(tile) - num);
+}
+
+uint8_t tile_to(Tile tile) noexcept {
+    return static_cast<uint8_t>(tile);
+}
+
+Tile tile_from(uint8_t tile) noexcept {
+    return static_cast<Tile>(tile);
+}
+
+
 Tile tile_cycle_next(Tile tile) noexcept {
     TileKind kind = tile_kind(tile);
     uint8_t digit = tile_digit(tile) + 1;
@@ -141,6 +158,10 @@ bool tile_is_jihai(Tile tile) noexcept {
 
 bool tile_is_suuhai(Tile tile) noexcept {
     return !tile_is_jihai(tile) && !tile_is_undefined(tile);
+}
+
+bool tile_is_yaochuuhai(Tile tile) noexcept {
+    return tile == Tile::E || tile == Tile::S || tile == Tile::W || tile == Tile::N || tile == Tile::P || tile == Tile::F || tile == Tile::C || tile == Tile::M1 || tile == Tile::M9 || tile == Tile::S1 || tile == Tile::S9 || tile == Tile::P1 || tile == Tile::P9;
 }
 
 
