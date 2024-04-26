@@ -75,7 +75,9 @@ enum class YakuKind: uint8_t {
     CHIIHOU = 44,
 };
 
-uint8_t yakukind_to(YakuKind) noexcept;
+#define yakukind_to(yakukind)\
+(static_cast<uint8_t>(yakukind))
+
 
 enum class AgariEvent {
     TUMO,

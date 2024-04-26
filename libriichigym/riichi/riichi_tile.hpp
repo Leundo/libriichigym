@@ -79,9 +79,19 @@ uint8_t tile_digit(Tile) noexcept;
 
 Tile tile_add(Tile, uint8_t) noexcept;
 Tile tile_sub(Tile, uint8_t) noexcept;
-uint8_t tile_to(Tile) noexcept;
-Tile tile_from(uint8_t) noexcept;
 
+
+#define tile_add(tile, num)\
+(static_cast<::riichi::Tile>(static_cast<uint8_t>(tile) + (num)))
+
+#define tile_sub(tile, num)\
+(static_cast<::riichi::Tile>(static_cast<uint8_t>(tile) - (num)))
+
+#define tile_to(tile)\
+(static_cast<uint8_t>(tile))
+
+#define tile_from(tile)\
+(static_cast<::riichi::Tile>(tile))
 
 
 Tile tile_cycle_next(Tile) noexcept;
@@ -136,12 +146,15 @@ Tile tile_make(TileKind, uint8_t) noexcept;
 Tile tilekind_first_tile(TileKind) noexcept;
 uint8_t tilekind_cycle(TileKind) noexcept;
 
-uint8_t tilekind_to(TileKind) noexcept;
-TileKind tilekind_from(uint8_t) noexcept;
-
 bool tilekind_is_undefined(TileKind) noexcept;
 bool tilekind_is_jihai(TileKind) noexcept;
 bool tilekind_is_suuhai(TileKind) noexcept;
+
+#define tilekind_to(tilekind)\
+(static_cast<uint8_t>(tilekind))
+
+#define tilekind_from(tilekind)\
+(static_cast<::riichi::TileKind>(tilekind))
 
 
 }

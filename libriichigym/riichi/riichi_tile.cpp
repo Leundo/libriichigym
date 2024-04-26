@@ -101,23 +101,6 @@ Tile tile_make(TileKind kind, uint8_t digit) noexcept {
 }
 
 
-Tile tile_add(Tile tile, uint8_t num) noexcept {
-    return static_cast<Tile>(static_cast<uint8_t>(tile) + num);
-}
-
-Tile tile_sub(Tile tile, uint8_t num) noexcept {
-    return static_cast<Tile>(static_cast<uint8_t>(tile) - num);
-}
-
-uint8_t tile_to(Tile tile) noexcept {
-    return static_cast<uint8_t>(tile);
-}
-
-Tile tile_from(uint8_t tile) noexcept {
-    return static_cast<Tile>(tile);
-}
-
-
 Tile tile_cycle_next(Tile tile) noexcept {
     TileKind kind = tile_kind(tile);
     uint8_t digit = tile_digit(tile) + 1;
@@ -198,15 +181,6 @@ uint8_t tilekind_cycle(TileKind tilekind) noexcept {
         case TileKind::SAN: { return 3; }
         default: { return 0; }
     }
-}
-
-
-uint8_t tilekind_to(TileKind tileKind) noexcept {
-    return static_cast<uint8_t>(tileKind);
-}
-
-TileKind tilekind_from(uint8_t tileKind) noexcept {
-    return static_cast<TileKind>(tileKind);
 }
 
 

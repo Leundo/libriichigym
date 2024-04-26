@@ -10,11 +10,6 @@
 
 
 namespace riichi {
-
-uint8_t yakukind_to(YakuKind yakukind) noexcept {
-    return static_cast<uint8_t>(yakukind);
-}
-
 bool PatternGroup::is_nil() const noexcept {
     return !is_koukushi && values == nullptr;
 }
@@ -744,7 +739,7 @@ static YakuCombo calculate_normal_yakucombo(const Board& board, NormalArr* arran
     yakucombo.is_nil = arrangement->yakus.none();
     yakucombo.yakus = arrangement->yakus;
     yakucombo.is_menzen = is_menzen;
-    yakucombo.dora_count = board_dora_count(board, player, arrangement->yakus[yakukind_to(YakuKind::RIICHI)] | arrangement->yakus[yakukind_to(YakuKind::DOUBLE_RIICHI)]);
+    yakucombo.dora_count = board_dora_count(board, player, arrangement->yakus[yakukind_to(YakuKind::RIICHI)] || arrangement->yakus[yakukind_to(YakuKind::DOUBLE_RIICHI)]);
     return yakucombo;
 }
 
