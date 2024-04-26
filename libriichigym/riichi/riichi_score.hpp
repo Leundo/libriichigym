@@ -170,13 +170,11 @@ public:
     YakuCombo() noexcept = default;
     ~YakuCombo() noexcept = default;
     
-    bool is_nil = true;
-    bool is_menzen = false;
-    uint8_t dora_count = 0;
-    Arrangement arrangement;
-    
-    std::bitset<64> yakus() const noexcept;
-    
+    std::bitset<64> yakus;
+    bool is_nil;
+    bool is_menzen;
+    uint8_t dora_count;
+        
     PenaltyPoint score() const noexcept;
 };
 

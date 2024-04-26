@@ -95,12 +95,6 @@ bool operator < (const PenaltyPoint& lhs, const PenaltyPoint& rhs) noexcept {
 }
 
 
-std::bitset<64> YakuCombo::yakus() const noexcept {
-    return std::visit(Visitor {
-        [](const auto& arr) { return arr.yakus; },
-    }, arrangement);
-}
-
 PenaltyPoint YakuCombo::score() const noexcept {
     return {};
 }
@@ -141,6 +135,23 @@ PatternGroup hand_patterngroup(const Hand& hand) {
 
 
 // MARK: - Agari
+static uint8_t board_dora_count(const Board& board, Player player, bool is_riichi) {
+    uint8_t count = board.chand(player).count(Tile::M5R) + board.chand(player).count(Tile::S5R) + board.chand(player).count(Tile::P5R);
+    
+    for (uint8_t i = 0; i < board.mountain.dora_curr; i++) {
+        Tile dora_tile = tile_cycle_next(board.mountain.outdora_tile(i));
+        count += board.chand(player).count_ignoring_level(dora_tile);
+    }
+    if (is_riichi) {
+        for (uint8_t i = 0; i < board.mountain.dora_curr; i++) {
+            Tile dora_tile = tile_cycle_next(board.mountain.indora_tile(i));
+            count += board.chand(player).count_ignoring_level(dora_tile);
+        }
+    }
+    
+    return count;
+}
+
 static Arrangement arrangement_make(uint32_t value, const Board& board, Player player, Tile trgtile) {
     
     if ((value & 0x01000000) != 0) {
@@ -274,7 +285,9 @@ static YakuCombo calculate_kokushi_yakucombo(const Board& board, Tile trgtile, P
     }
     
     yakucombo.is_nil = false;
-    yakucombo.arrangement = arrangement;
+    yakucombo.yakus = arrangement.yakus;
+    yakucombo.is_menzen = true;
+    yakucombo.dora_count = board_dora_count(board, player, false);
     return yakucombo;
 }
 
@@ -294,7 +307,9 @@ static YakuCombo calculate_chuuren_yakucombo(const Board& board, ChuurenArr* arr
     }
     
     yakucombo.is_nil = false;
-    yakucombo.arrangement = *arrangement;
+    yakucombo.yakus = arrangement->yakus;
+    yakucombo.is_menzen = true;
+    yakucombo.dora_count = board_dora_count(board, player, false);
     return yakucombo;
 }
 
@@ -352,7 +367,9 @@ static YakuCombo calculate_chiitoitsu_yakucombo(const Board& board, ChiitoitsuAr
     }
     
     yakucombo.is_nil = false;
-    yakucombo.arrangement = *arrangement;
+    yakucombo.yakus = arrangement->yakus;
+    yakucombo.is_menzen = true;
+    yakucombo.dora_count = board_dora_count(board, player, false);
     return yakucombo;
 }
 
@@ -469,7 +486,6 @@ static YakuCombo calculate_normal_yakucombo(const Board& board, NormalArr* arran
         Tile key_tile = arrangement->mentus[i];
         TileKind tilekind = tile_kind(key_tile);
         uint8_t tiledigit = tile_digit(key_tile);
-        bool is_suu = tile_is_suu(key_tile);
         
         flags |= 1 << underlie(tilekind);
         
@@ -726,7 +742,9 @@ static YakuCombo calculate_normal_yakucombo(const Board& board, NormalArr* arran
 
     
     yakucombo.is_nil = arrangement->yakus.none();
-    yakucombo.arrangement = *arrangement;
+    yakucombo.yakus = arrangement->yakus;
+    yakucombo.is_menzen = is_menzen;
+    yakucombo.dora_count = board_dora_count(board, player, arrangement->yakus[yakukind_to(YakuKind::RIICHI)] | arrangement->yakus[yakukind_to(YakuKind::DOUBLE_RIICHI)]);
     return yakucombo;
 }
 
