@@ -16,63 +16,63 @@ namespace riichi {
 
 enum class YakuKind: uint8_t {
     // Upgradable
-    RIICHI,
-    DOUBLE_RIICHI,
+    RIICHI = 0,
+    DOUBLE_RIICHI = 1,
 
-    LIPEIKOU,
-    RYANPEIKOU,
+    IIPEIKOU = 2,
+    RYANPEIKOU = 3,
 
-    HONITSU,
-    CHINITSU,
+    HONITSU = 4,
+    CHINITSU = 5,
 
-    CHANTAIYAO,
-    JUNCHAN_TAIYAO,
-    HONROUTOU,
+    CHANTAIYAO = 6,
+    JUNCHAN_TAIYAO = 7,
+    HONROUTOU = 8,
 
     // Perfectible
-    KOUKUSHI_MUSOU,
-    PREFECT_KOUKUSHI_MUSOU,
+    KOUKUSHI_MUSOU = 9,
+    PREFECT_KOUKUSHI_MUSOU = 10,
 
-    SUUANKOU,
-    PREFECT_SUUANKOU,
+    SUUANKOU = 11,
+    PREFECT_SUUANKOU = 12,
 
-    CHUUREN_POUTOU,
-    PREFECT_CHUUREN_POUTOU,
+    CHUUREN_POUTOU = 13,
+    PREFECT_CHUUREN_POUTOU = 14,
 
     // Other
-    MENZENCHIN_TUMOHOU,
-    IPPATSU,
-    PINFU,
+    MENZENCHIN_TUMOHOU = 15,
+    IPPATSU = 16,
+    PINFU = 17,
 
-    HAITEI_RAOYUE,
-    HOUTEI_RAOYUI,
-    RINSHAN_KAIHOU,
-    CHANKAN,
-    TANYAO,
-    YAKUHAI_JIKAZE,
-    YAKUHAI_BAKAZE,
-    YAKUHAI_PAI,
-    YAKUHAI_FA,
-    YAKUHAI_CHUNG,
+    HAITEI_RAOYUE = 18,
+    HOUTEI_RAOYUI = 19,
+    RINSHAN_KAIHOU = 20,
+    CHANKAN = 21,
+    TANYAO = 22,
+    YAKUHAI_JIKAZE = 23,
+    YAKUHAI_BAKAZE = 24,
+    YAKUHAI_PAI = 25,
+    YAKUHAI_FA = 26,
+    YAKUHAI_CHUNG = 27,
 
-    SANSHOKU_DOUJUN,
-    ITTSU,
-    TOITOI,
-    SANANKOU,
-    SANSHOKU_DOUKOU,
-    SANKANTSU,
-    CHIITOITSU,
-    SHOUSANGEN,
+    SANSHOKU_DOUJUN = 28,
+    ITTSU = 29,
+    TOITOI = 30,
+    SANANKOU = 31,
+    SANSHOKU_DOUKOU = 32,
+    SANKANTSU = 33,
+    CHIITOITSU = 34,
+    SHOUSANGEN = 35,
 
-    DAISANGEN,
-    SHOUSUUSHII,
-    TSUUIISOU,
-    CHINROUTOU,
-    RYUUIISOU,
-    SUUKANTSU,
-    TENHOU,
-    CHIIHOU,
-    NAGASHI_MANGAN,
+    DAISANGEN = 36,
+    SHOUSUUSHII = 37,
+    DAISUUSHII = 38,
+    TSUUIISOU = 39,
+    CHINROUTOU = 40,
+    RYUUIISOU = 41,
+    SUUKANTSU = 42,
+    TENHOU = 43,
+    CHIIHOU = 44,
 };
 
 uint8_t yakukind_to(YakuKind) noexcept;
@@ -118,12 +118,31 @@ typedef struct NormalArr {
     Tile pair;
     Tile trgtile;
     
+    enum class Machi {
+        NIL,
+        DANKI,
+        KANCHAN,
+        PENCHAN,
+        RYANMEN,
+        SOUPON,
+    };
+    
     bool get_mentu_flag(Offset<uint8_t>, uint8_t) const noexcept;
     void set_mentu_flag(Offset<uint8_t>, uint8_t, bool) noexcept;
     bool get_mentu_combinable(Offset<uint8_t>) const noexcept;
     void set_mentu_combinable(Offset<uint8_t>, bool) noexcept;
     bool get_pair_combinable() const noexcept;
     void set_pair_combinable(bool) noexcept;
+    
+    uint8_t shuntu_count() const noexcept;
+    uint8_t koutu_count() const noexcept;
+    uint8_t hidden_koutu_count() const noexcept;
+    uint8_t kantu_count() const noexcept;
+    
+    bool is_mentu_ryanmen(Offset<uint8_t>) const noexcept;
+    bool is_any_mentu_ryanmen() const noexcept;
+    
+    bool is_menzenchin() const noexcept;
     
     constexpr static uint8_t IS_SHUNTU = 0;
     constexpr static uint8_t IS_KAN = 1;
@@ -152,6 +171,8 @@ public:
     ~YakuCombo() noexcept = default;
     
     bool is_nil = true;
+    bool is_menzen = false;
+    uint8_t dora_count = 0;
     Arrangement arrangement;
     
     std::bitset<64> yakus() const noexcept;

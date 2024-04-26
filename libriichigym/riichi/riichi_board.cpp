@@ -12,10 +12,6 @@
 
 namespace riichi {
 
-Board::Cache::Cache() noexcept {
-    fogs = {};
-}
-
 
 // MARK: - Board
 Board::Board(std::optional<unsigned int> seed, std::optional<std::function<void(Mountain&, std::mt19937&)>> shuffle) noexcept {
@@ -40,6 +36,17 @@ Board::Board(std::optional<unsigned int> seed, std::optional<std::function<void(
     action_permission = 0;
     action_tip = 0;
     cache = Cache();
+}
+
+
+Tile Board::bakaze() const noexcept {
+    switch ((session / 4) % 4) {
+        case 0: return Tile::E;
+        case 1: return Tile::S;
+        case 2: return Tile::W;
+        case 3: return Tile::N;
+    }
+    __builtin_unreachable();
 }
 
 
@@ -467,7 +474,7 @@ void Board::response(const ActionGroup& group) noexcept {
             discarded->tile = discarded_tile;
             discarded->move = move;
             discarded->owner = current_player;
-            discarded->is_onriichi = last_discarded == nullptr ? false : last_discarded->is_onriichi;
+            discarded->is_in_riichi = last_discarded == nullptr ? false : last_discarded->is_in_riichi;
             discarded->kiri = kiri;
             discarded->naki = Naki::UND;
             

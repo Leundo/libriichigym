@@ -61,7 +61,7 @@ public:
     Tile tile = {};
     uint8_t move = {};
     Player owner = {};
-    bool is_onriichi = {};
+    bool is_in_riichi = {};
     Kiri kiri = {};
     Naki naki = {};
     Offset<uint8_t> triggering = {};
@@ -223,7 +223,17 @@ public:
         if (curr <= 0) {
             return nullptr;
         } else {
-            return &discardeds[routes[static_cast<uint8_t>(player)][curr]];
+            return &discardeds[routes[static_cast<uint8_t>(player)][curr - 1]];
+        }
+    }
+    
+    template <AnyMatching<Player, Offset<uint8_t>> AnyPlayer>
+    const Discarded* penultimate_cdiscarded(AnyPlayer player) const noexcept {
+        uint8_t curr = pvt_currs[static_cast<uint8_t>(player)];
+        if (curr <= 1) {
+            return nullptr;
+        } else {
+            return &discardeds[routes[static_cast<uint8_t>(player)][curr - 2]];
         }
     }
     
@@ -243,7 +253,7 @@ public:
         if (curr <= 0) {
             return nullptr;
         } else {
-            return &discardeds[routes[static_cast<uint8_t>(player)][curr]];
+            return &discardeds[routes[static_cast<uint8_t>(player)][curr - 1]];
         }
     }
     
@@ -269,6 +279,9 @@ public:
     Offset<uint8_t> pub_curr = 0;
     std::array<Offset<uint8_t>, PLAYER_UPPER_COUNT> pvt_currs = {};
     
+    uint8_t count() const noexcept { return pub_curr; }
+    bool is_empty() const noexcept { return pub_curr == 0; }
+    
     template <AnyMatching<Player, Offset<uint8_t>> AnyPlayer>
     const Exposed* cexposed(AnyPlayer player, Offset<uint8_t> index) const noexcept {
         uint8_t curr = pvt_currs[static_cast<uint8_t>(player)];
@@ -285,9 +298,20 @@ public:
         if (curr <= 0) {
             return nullptr;
         } else {
-            return &exposeds[routes[static_cast<uint8_t>(player)][curr]];
+            return &exposeds[routes[static_cast<uint8_t>(player)][curr - 1]];
         }
     }
+    
+    template <AnyMatching<Player, Offset<uint8_t>> AnyPlayer>
+    const Exposed* penultimate_cexposed(AnyPlayer player) const noexcept {
+        uint8_t curr = pvt_currs[static_cast<uint8_t>(player)];
+        if (curr <= 1) {
+            return nullptr;
+        } else {
+            return &exposeds[routes[static_cast<uint8_t>(player)][curr - 2]];
+        }
+    }
+    
     
     template <AnyMatching<Player, Offset<uint8_t>> AnyPlayer>
     Exposed* append(AnyPlayer player) noexcept {

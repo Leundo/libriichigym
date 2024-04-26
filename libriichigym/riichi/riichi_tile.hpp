@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <array>
 #include <utility>
+#include "riichi_util.hpp"
 
 
 namespace riichi {
@@ -89,9 +90,21 @@ Tile tile_linear_next(Tile) noexcept;
 Tile tile_linear_prev(Tile) noexcept;
 
 
-bool tile_is_jihai(Tile) noexcept;
-bool tile_is_suuhai(Tile) noexcept;
-bool tile_is_yaochuuhai(Tile) noexcept;
+bool tile_is_ji(Tile) noexcept;
+bool tile_is_kaze(Tile) noexcept;
+bool tile_is_suu(Tile) noexcept;
+bool tile_is_yaochuu(Tile) noexcept;
+bool tile_is_routou(Tile) noexcept;
+bool tile_is_green(Tile) noexcept;
+
+
+template <AllMatching<Tile>... Args>
+bool tile_is_or(Tile tile, Args... args) noexcept {
+    std::array<Tile, sizeof...(args)> tiles = {args...};
+    return std::any_of(tiles.cbegin(), tiles.cend(), [tile](Tile target_tile) {
+        return tile == target_tile;
+    });
+}
 
 
 template<class URBG>

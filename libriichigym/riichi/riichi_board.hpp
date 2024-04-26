@@ -48,9 +48,31 @@ public:
     
     class Cache {
     public:
-        Cache() noexcept;
+        Cache() noexcept = default;
         ~Cache() noexcept = default;
-        std::array<Hand, PLAYER_UPPER_COUNT> fogs;
+        
+        constexpr static uint8_t STATUS_SIZE = 5;
+        
+        std::array<Hand, PLAYER_UPPER_COUNT> fogs = {};
+        std::array<std::bitset<STATUS_SIZE>, PLAYER_UPPER_COUNT> statuses = {};
+        
+        constexpr static uint8_t IS_IN_RIICHI = 0;
+        constexpr static uint8_t IS_IN_DOUBLE_RIICHI = 1;
+        constexpr static uint8_t IS_IN_DOUJUN_FURITEN = 2;
+        constexpr static uint8_t IS_IN_SUTEHAI_FURITEN = 3;
+        constexpr static uint8_t IS_IN_RIICHI_FURITEN = 4;
+        
+        
+        template <AnyMatching<Player, Offset<uint8_t>> AnyPlayer>
+        const std::bitset<STATUS_SIZE>& cstatus(AnyPlayer player) const noexcept {
+            return statuses[static_cast<uint8_t>(player)];
+        }
+        
+        template <AnyMatching<Player, Offset<uint8_t>> AnyPlayer>
+        std::bitset<STATUS_SIZE>& status(AnyPlayer player) noexcept {
+            return statuses[static_cast<uint8_t>(player)];
+        }
+        
         
         template <AnyMatching<Player, Offset<uint8_t>> AnyPlayer>
         Hand& fog(AnyPlayer player) noexcept {
@@ -107,6 +129,29 @@ public:
     std::bitset<TILE_COLOR> action_tip;
     
     Cache cache;
+    
+    Tile bakaze() const noexcept;
+    
+    template <AnyMatching<Player, Offset<uint8_t>> AnyPlayer>
+    Tile jikaze(AnyPlayer player) const noexcept {
+        switch ((session + std::to_underlying(player)) % 4) {
+            case 0: return Tile::E;
+            case 1: return Tile::S;
+            case 2: return Tile::W;
+            case 3: return Tile::N;
+        }
+        __builtin_unreachable();
+    }
+    
+    template <AnyMatching<Player, Offset<uint8_t>> AnyPlayer>
+    bool tile_is_none_of_bakaze_or_jikaze(AnyPlayer player, Tile tile) const noexcept {
+        return tile != bakaze() && tile != jikaze(player);
+    }
+    
+    template <AnyMatching<Player, Offset<uint8_t>> AnyPlayer>
+    bool tile_is_kakukaze(AnyPlayer player, Tile tile) const noexcept {
+        return tile_is_kaze(tile) && tile_is_none_of_bakaze_or_jikaze(player, tile);
+    }
     
     template <AnyMatching<Player, Offset<uint8_t>> AnyPlayer>
     const Hand& chand(AnyPlayer player) const noexcept {

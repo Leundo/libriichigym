@@ -152,16 +152,28 @@ Tile tile_linear_prev(Tile tile) noexcept {
 }
 
 
-bool tile_is_jihai(Tile tile) noexcept {
+bool tile_is_ji(Tile tile) noexcept {
     return static_cast<uint8_t>(tile) >= static_cast<uint8_t>(Tile::E) && static_cast<uint8_t>(tile) <= static_cast<uint8_t>(Tile::C);
 }
 
-bool tile_is_suuhai(Tile tile) noexcept {
-    return !tile_is_jihai(tile) && !tile_is_undefined(tile);
+bool tile_is_kaze(Tile tile) noexcept {
+    return static_cast<uint8_t>(tile) >= static_cast<uint8_t>(Tile::E) && static_cast<uint8_t>(tile) <= static_cast<uint8_t>(Tile::N);;
 }
 
-bool tile_is_yaochuuhai(Tile tile) noexcept {
+bool tile_is_suu(Tile tile) noexcept {
+    return !tile_is_ji(tile) && !tile_is_undefined(tile);
+}
+
+bool tile_is_yaochuu(Tile tile) noexcept {
     return tile == Tile::E || tile == Tile::S || tile == Tile::W || tile == Tile::N || tile == Tile::P || tile == Tile::F || tile == Tile::C || tile == Tile::M1 || tile == Tile::M9 || tile == Tile::S1 || tile == Tile::S9 || tile == Tile::P1 || tile == Tile::P9;
+}
+
+bool tile_is_routou(Tile tile) noexcept {
+    return tile == Tile::M1 || tile == Tile::M9 || tile == Tile::S1 || tile == Tile::S9 || tile == Tile::P1 || tile == Tile::P9;
+}
+
+bool tile_is_green(Tile tile) noexcept {
+    return tile == Tile::S2 || tile == Tile::S3 || tile == Tile::S4 || tile == Tile::S6 || tile == Tile::S8 || tile == Tile::F;
 }
 
 
