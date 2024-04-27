@@ -48,10 +48,10 @@ const char* riichi_gym_render_cli_ui(const riichi_gym_board_t* c_board, riichi_g
     buffer_write("Seed: 0x%016X | ", board->seed);
     buffer_write("Ba: ");
     switch ((board->session / 4) % 4) {
-        case 0: { buffer_write("E%d | ", board->session % 4 + 1); break;}
-        case 1: { buffer_write("S%d | ", board->session % 4 + 1); break;}
-        case 2: { buffer_write("W%d | ", board->session % 4 + 1); break;}
-        case 3: { buffer_write("N%d | ", board->session % 4 + 1); break;}
+        case 0: { buffer_write("E%d_%d | ", board->session % 4 + 1, board->honba); break;}
+        case 1: { buffer_write("S%d_%d | ", board->session % 4 + 1, board->honba); break;}
+        case 2: { buffer_write("W%d_%d | ", board->session % 4 + 1, board->honba); break;}
+        case 3: { buffer_write("N%d_%d | ", board->session % 4 + 1, board->honba); break;}
     }
     buffer_write("Score: ");
     buffer_write("%6d %6d %6d %6d\n", board->scores[0], board->scores[1], board->scores[2], board->scores[3]);

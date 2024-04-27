@@ -36,14 +36,14 @@ public:
         CHI,
         KAN,
         SCORE,
-        CLEAN,
+        END,
     };
     
     enum class LifeIndex: uint8_t {
-        EAST_AGARI = static_cast<uint8_t>(Player::P0),
-        SOUTH_AGARI = static_cast<uint8_t>(Player::P1),
-        WEST_AGARI = static_cast<uint8_t>(Player::P2),
-        NORTH_AGARI = static_cast<uint8_t>(Player::P3),
+        P0_AGARI = static_cast<uint8_t>(Player::P0),
+        P1_AGARI = static_cast<uint8_t>(Player::P1),
+        P2_AGARI = static_cast<uint8_t>(Player::P2),
+        P3_AGARI = static_cast<uint8_t>(Player::P3),
         RUN = 4,
         ABORT = 5,
     };
@@ -175,8 +175,11 @@ public:
     std::optional<YakuCombo>& combo(AnyPlayer player) noexcept {
         return combos[static_cast<uint8_t>(player)];
     }
+    
+    Player dealer() const noexcept;
+    std::tuple<Player, Player, Player> punters() const noexcept;
+    std::pair<Player, Player> punters_expect(Player) const noexcept;
 
-    void restart(bool) noexcept;
     ActionGroup request() noexcept;
     void response(const ActionGroup&) noexcept;
 };

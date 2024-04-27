@@ -27,7 +27,6 @@ Board::Board(std::optional<unsigned int> seed, std::optional<std::function<void(
     tribute = 0;
     scores.fill(RIICHI_GYM_INITIAL_SCORE);
     
-    
     current_player = Player::P0;
     stage = Stage::PREPARE;
     life = 1 << static_cast<uint8_t>(LifeIndex::RUN);
@@ -49,6 +48,46 @@ Tile Board::bakaze() const noexcept {
     __builtin_unreachable();
 }
 
+Player Board::dealer() const noexcept {
+    switch (session % 4) {
+        case 0: { return Player::P0; }
+        case 1: { return Player::P1; }
+        case 2: { return Player::P2; }
+        case 3: { return Player::P3; }
+    }
+    __builtin_unreachable();
+}
+
+std::tuple<Player, Player, Player> Board::punters() const noexcept {
+    Player cdealer = dealer();
+    std::array<Player, 3> cpunters = {};
+    uint8_t index = 0;
+    for (uint8_t i = 0; i < PLAYER_COUNT; i++) {
+        if (i != underlie(cdealer)) {
+            cpunters[index] = static_cast<Player>(i);
+            index += 1;
+        }
+    }
+    return std::make_tuple(cpunters[0], cpunters[1], cpunters[2]);
+}
+
+std::pair<Player, Player> Board::punters_expect(Player player) const noexcept {
+    std::pair<Player, Player> punter_pair = std::make_pair(Player::P0, Player::P0);
+    Player cdealer = dealer();
+    bool is_first_empty = true;
+    for (uint8_t i = 0; i < PLAYER_COUNT; i++) {
+        if (i != underlie(player) && i != underlie(cdealer)) {
+            if (is_first_empty) {
+                is_first_empty = false;
+                punter_pair.first = static_cast<Player>(i);
+            } else {
+                punter_pair.second = static_cast<Player>(i);
+            }
+        }
+    }
+    return punter_pair;
+}
+
 
 ActionGroup Board::request() noexcept {
     ActionGroup group = {};
@@ -56,29 +95,7 @@ ActionGroup Board::request() noexcept {
     while (true) {
         switch (stage) {
             case Stage::PREPARE: {
-                switch (session % 4) {
-                    case 0: { current_player = Player::P0; break; }
-                    case 1: { current_player = Player::P1; break; }
-                    case 2: { current_player = Player::P2; break; }
-                    case 3: { current_player = Player::P3; break; }
-                }
-                
-                life = 1 << static_cast<uint8_t>(LifeIndex::RUN);
-                move = 0;
-                cache = Cache();
-                
-                shuffle(mountain, random_generator);
-
-                for (uint8_t i = 0; i < PLAYER_COUNT; i++) {
-                    for (uint8_t j = 0; j < 13; j++) {
-                        Tile tile = mountain.draw(false);
-                        hands[i].increase(tile);
-                        cache.fogs[i].decrease(tile);
-                    }
-                    cache.fogs[i].decrease(mountain.outdora_tile(0));
-                }
-                
-                stage = Stage::DRAW;
+                board_restart(*this);
                 break;
             }
             case Stage::DRAW: {
@@ -103,8 +120,7 @@ ActionGroup Board::request() noexcept {
                 break;
             }
             case Stage::TUMO: {
-                board_set_tumo_yakucombos(this);
-                if (ccombo(current_player).has_value()) {
+                if (board_set_tumo_yakucombos(*this)) {
                     group.set(current_player, hold_tile, ActionKind::AGARI);
                     return group;
                 } else {
@@ -156,7 +172,7 @@ ActionGroup Board::request() noexcept {
                 break;
             }
             case Stage::RONG: {
-                group = board_calculate_rong_group(*this);
+                group = board_calculate_rong_group_and_set_yakucombos(*this);
                 action_permission = group.actionkinds_nonundefineds();
                 if (action_permission.any()) {
                     return group;
@@ -198,10 +214,16 @@ ActionGroup Board::request() noexcept {
                 break;
             }
             case Stage::SCORE: {
+                board_calculate_and_update_score(*this);
+                if (board_clean_and_can_restart(*this)) {
+                    stage = Stage::DRAW;
+                } else {
+                    stage = Stage::END;
+                }
                 break;
             }
-            case Stage::CLEAN: {
-                break;
+            case Stage::END: {
+                return {};
             }
         }
     }
@@ -269,7 +291,13 @@ void Board::response(const ActionGroup& group) noexcept {
             if (!actables.any()) {
                 stage = Stage::KAN;
             } else {
-                // TODO:
+                life = {};
+                for (uint8_t i = 0; i < PLAYER_COUNT; i++) {
+                    if (actables[i]) {
+                        life.set(i);
+                    }
+                }
+                stage = Stage::SCORE;
             }
             break;
         }
@@ -490,7 +518,7 @@ void Board::response(const ActionGroup& group) noexcept {
         case Stage::PREPARE:
         case Stage::DRAW:
         case Stage::SCORE:
-        case Stage::CLEAN:{
+        case Stage::END:{
             break;
         }
     }

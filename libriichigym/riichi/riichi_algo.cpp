@@ -5,6 +5,7 @@
 //  Created by Leundo on 2024/04/23.
 //
 
+#include <algorithm>
 #include "riichi_algo.hpp"
 #include "riichi_score.hpp"
 
@@ -15,11 +16,16 @@ bool board_can_abort(const Board&) noexcept {
     return false;
 }
 
-void board_set_tumo_yakucombos(Board* board) noexcept {
-    auto patterngroup = hand_patterngroup(board->chand(board->current_player));
+bool board_set_tumo_yakucombos(Board& board) noexcept {
+    auto patterngroup = hand_patterngroup(board.chand(board.current_player));
     if (patterngroup.has_value()) {
-        board->combo(board->current_player) = board_yakucombo(*board, patterngroup.value(), board->current_player, AgariEvent::TUMO);
+        auto yakucombo = board_yakucombo(board, patterngroup.value(), board.current_player, AgariEvent::TUMO);
+        board.combo(board.current_player) = yakucombo;
+        if (yakucombo.has_value()) {
+            return true;
+        }
     }
+    return false;
 }
 
 bool board_can_flower(const Board&) noexcept {
@@ -39,8 +45,22 @@ ActionGroup board_calculate_loot_group(const Board&) noexcept {
     return group;
 }
 
-ActionGroup board_calculate_rong_group(const Board&) noexcept {
+ActionGroup board_calculate_rong_group_and_set_yakucombos(Board& board) noexcept {
     ActionGroup group = {};
+    for (Offset<uint8_t> i = 0; i < PLAYER_COUNT; i++) {
+        if (i == static_cast<uint8_t>(board.current_player)) {
+            continue;
+        }
+        board.hand(i).increase(board.drop_tile);
+        if (auto patterngroup = hand_patterngroup(board.chand(board.current_player)); patterngroup.has_value()) {
+            auto yakucombo = board_yakucombo(board, patterngroup.value(), board.current_player, AgariEvent::TUMO);
+            board.combo(board.current_player) = yakucombo;
+            if (yakucombo.has_value()) {
+                group.set(i, board.drop_tile, ActionKind::AGARI);
+            }
+        }
+        board.hand(i).decrease(board.drop_tile);
+    }
     return group;
 }
 
@@ -141,6 +161,105 @@ ActionGroup board_calculate_chi_group(const Board& board) noexcept {
     }
     
     return group;
+}
+
+void board_restart(Board& board) noexcept {
+    switch (board.session % 4) {
+        case 0: { board.current_player = Player::P0; break; }
+        case 1: { board.current_player = Player::P1; break; }
+        case 2: { board.current_player = Player::P2; break; }
+        case 3: { board.current_player = Player::P3; break; }
+    }
+    
+    board.mountain = {};
+    board.river = {};
+    board.shrine = {};
+    board.hands = {};
+    
+    board.move = 0;
+    board.life = 1 << static_cast<uint8_t>(Board::LifeIndex::RUN);
+    board.hold_tile = Tile::UND;
+    board.drop_tile = Tile::UND;
+    board.action_permission = 0;
+    board.action_tip = 0;
+    board.cache = Board::Cache();
+    
+    board.shuffle(board.mountain, board.random_generator);
+
+    for (uint8_t i = 0; i < PLAYER_COUNT; i++) {
+        for (uint8_t j = 0; j < 13; j++) {
+            Tile tile = board.mountain.draw(false);
+            board.hands[i].increase(tile);
+            board.cache.fogs[i].decrease(tile);
+        }
+        board.cache.fogs[i].decrease(board.mountain.outdora_tile(0));
+    }
+    
+    board.stage = Board::Stage::DRAW;
+}
+
+void board_calculate_and_update_score(Board& board) noexcept {
+    if ((board.life & bitset_make_containing<8>(underlie(Board::LifeIndex::P0_AGARI), underlie(Board::LifeIndex::P1_AGARI), underlie(Board::LifeIndex::P2_AGARI), underlie(Board::LifeIndex::P3_AGARI))).count() > 0) {
+        if (board.life[underlie(board.current_player)]) {
+            // Tumo
+            auto point = board.combos[underlie(board.current_player)].transform([](const auto& combo) {
+                return combo.score();
+            }).value_or(PenaltyPoint {});
+            if (board.dealer() == board.current_player) {
+                auto punters = board.punters();
+                board.scores[underlie(board.current_player)] += 3 * point.dealer_tumo + board.honba * 300 + static_cast<int32_t>(board.tribute) * 1000;
+                board.scores[underlie(std::get<0>(punters))] -= point.dealer_tumo + board.honba * 100;
+                board.scores[underlie(std::get<1>(punters))] -= point.dealer_tumo + board.honba * 100;
+                board.scores[underlie(std::get<2>(punters))] -= point.dealer_tumo + board.honba * 100;
+                board.honba += 1;
+            } else {
+                auto punters = board.punters_expect(board.current_player);
+                board.scores[underlie(board.current_player)] += 2 * point.punter_tumo_from_punter + point.punter_tumo_from_dealer + board.honba * 300 + static_cast<int32_t>(board.tribute) * 1000;
+                board.scores[underlie(board.dealer())] -= point.punter_tumo_from_dealer + board.honba * 100;
+                board.scores[underlie(std::get<0>(punters))] -= point.punter_tumo_from_punter + board.honba * 100;
+                board.scores[underlie(std::get<1>(punters))] -= point.punter_tumo_from_punter + board.honba * 100;
+                board.honba = 0;
+                board.session += 1;
+            }
+        } else {
+            // Rong
+            bool does_dealer_rong = false;
+            for (uint8_t offset = 1; offset < PLAYER_COUNT; offset++) {
+                uint8_t i = (underlie(board.current_player) + offset) % PLAYER_COUNT;
+                if (board.life[i] && board.combos[i].has_value()) {
+                    auto point = board.combos[i].value().score();
+                    if (board.dealer() == static_cast<Player>(i)) {
+                        board.scores[underlie(board.current_player)] -= point.dealer_rong + board.honba * 300 + static_cast<int32_t>(board.tribute) * 1000;
+                        board.scores[i] += point.dealer_rong + board.honba * 300;
+                        does_dealer_rong = true;
+                    } else {
+                        board.scores[underlie(board.current_player)] -= point.dealer_rong + board.honba * 300 + static_cast<int32_t>(board.tribute) * 1000;
+                        board.scores[i] += point.punter_rong + board.honba * 300;
+                    }
+                    board.tribute = 0;
+                }
+            }
+            if (does_dealer_rong) {
+                board.honba += 1;
+            } else {
+                board.honba = 0;
+                board.session += 1;
+            }
+        }
+        board.tribute = 0;
+    } else {
+        board.honba += 1;
+    }
+}
+
+bool board_clean_and_can_restart(Board& board) noexcept {
+    bool can_restart = board.session < 4 && std::all_of(board.scores.cbegin(), board.scores.cend(), [](auto score) {
+        return score > 0;
+    });
+    if (can_restart) {
+        board_restart(board);
+    }
+    return can_restart;
 }
 
 
