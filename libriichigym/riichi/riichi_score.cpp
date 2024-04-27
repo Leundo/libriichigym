@@ -836,6 +836,7 @@ static YakuCombo calculate_normal_yakucombo(const Board& board, NormalArr* arran
             if (tile_is_yaochuu(arrangement->mentus[i])) {
                 base *= 2;
             }
+            yakucombo.fu += base;
         }
     }
     {
