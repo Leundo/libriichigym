@@ -140,7 +140,6 @@ typedef struct NormalArr {
     
     uint8_t shuntu_count() const noexcept;
     uint8_t koutu_count() const noexcept;
-//    uint8_t hidden_koutu_count() const noexcept;
     uint8_t kantu_count() const noexcept;
     
     std::bitset<4> is_hidden_koutus() const noexcept;
