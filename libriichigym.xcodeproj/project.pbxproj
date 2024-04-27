@@ -18,6 +18,7 @@
 		71475ADC2BD9D8F000F44850 /* riichi_cheater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475ADA2BD9D8F000F44850 /* riichi_cheater.cpp */; };
 		71475ADE2BD9F53200F44850 /* riichi_algo_pattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475ADD2BD9F53200F44850 /* riichi_algo_pattern.cpp */; };
 		71475AE12BDA8F2900F44850 /* riichi_score.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71475ADF2BDA8F2900F44850 /* riichi_score.cpp */; };
+		717765732BDCD06900B9EC94 /* riichi_yaku.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 717765712BDCD06900B9EC94 /* riichi_yaku.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -55,6 +56,8 @@
 		71475ADD2BD9F53200F44850 /* riichi_algo_pattern.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = riichi_algo_pattern.cpp; sourceTree = "<group>"; };
 		71475ADF2BDA8F2900F44850 /* riichi_score.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = riichi_score.cpp; sourceTree = "<group>"; };
 		71475AE02BDA8F2900F44850 /* riichi_score.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = riichi_score.hpp; sourceTree = "<group>"; };
+		717765712BDCD06900B9EC94 /* riichi_yaku.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = riichi_yaku.cpp; sourceTree = "<group>"; };
+		717765722BDCD06900B9EC94 /* riichi_yaku.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = riichi_yaku.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +119,8 @@
 				71475AC22BD7537B00F44850 /* riichi_tile.hpp */,
 				71475AC72BD776F300F44850 /* riichi_display.cpp */,
 				71475AC82BD776F300F44850 /* riichi_display.hpp */,
+				717765712BDCD06900B9EC94 /* riichi_yaku.cpp */,
+				717765722BDCD06900B9EC94 /* riichi_yaku.hpp */,
 				71475ACD2BD7898400F44850 /* riichi_board.cpp */,
 				71475ACE2BD7898400F44850 /* riichi_board.hpp */,
 				71475AD32BD7C98500F44850 /* riichi_algo.cpp */,
@@ -194,6 +199,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				71475ADC2BD9D8F000F44850 /* riichi_cheater.cpp in Sources */,
+				717765732BDCD06900B9EC94 /* riichi_yaku.cpp in Sources */,
 				71475ACF2BD7898400F44850 /* riichi_board.cpp in Sources */,
 				71475AAF2BD742D400F44850 /* main.cpp in Sources */,
 				71475ADE2BD9F53200F44850 /* riichi_algo_pattern.cpp in Sources */,

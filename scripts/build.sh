@@ -44,6 +44,7 @@ display_cfile="$project_dir/libriichigym/riichi/riichi_display.cpp"
 tile_cfile="$project_dir/libriichigym/riichi/riichi_tile.cpp"
 util_cfile="$project_dir/libriichigym/riichi/riichi_util.cpp"
 score_cfile="$project_dir/libriichigym/riichi/riichi_score.cpp"
+yaku_cfile="$project_dir/libriichigym/riichi/riichi_yaku.cpp"
 
 
 riichi_folder="$project_dir/libriichigym/riichi"
@@ -61,6 +62,7 @@ $display_cfile \
 $tile_cfile \
 $util_cfile \
 $score_cfile \
+$yaku_cfile \
 -I $riichi_folder \
 -I $include_folder
 

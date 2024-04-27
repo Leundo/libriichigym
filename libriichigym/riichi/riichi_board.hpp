@@ -13,6 +13,8 @@
 #include <random>
 #include <functional>
 #include "riichi_display.hpp"
+#include "riichi_yaku.hpp"
+
 
 namespace riichi {
 
@@ -127,6 +129,7 @@ public:
     
     std::bitset<PLAYER_UPPER_COUNT> action_permission;
     std::bitset<TILE_COLOR> action_tip;
+    std::array<std::optional<YakuCombo>, PLAYER_UPPER_COUNT> combos = {};
     
     Cache cache;
     
@@ -161,6 +164,16 @@ public:
     template <AnyMatching<Player, Offset<uint8_t>> AnyPlayer>
     Hand& hand(AnyPlayer player) noexcept {
         return hands[static_cast<uint8_t>(player)];
+    }
+    
+    template <AnyMatching<Player, Offset<uint8_t>> AnyPlayer>
+    const std::optional<YakuCombo>& ccombo(AnyPlayer player) const noexcept {
+        return combos[static_cast<uint8_t>(player)];
+    }
+    
+    template <AnyMatching<Player, Offset<uint8_t>> AnyPlayer>
+    std::optional<YakuCombo>& combo(AnyPlayer player) noexcept {
+        return combos[static_cast<uint8_t>(player)];
     }
 
     void restart(bool) noexcept;

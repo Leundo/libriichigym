@@ -10,13 +10,15 @@
 
 #include "riichi_board.hpp"
 
+
 namespace riichi {
 
 bool board_can_abort(const Board&) noexcept;
-bool board_can_tumo(const Board&) noexcept;
 bool board_can_flower(const Board&) noexcept;
 bool board_can_sekan(const Board&) noexcept;
 bool board_can_riichi(const Board&) noexcept;
+
+void board_set_tumo_yakucombos(Board*) noexcept;
 
 ActionGroup board_calculate_loot_group(const Board&) noexcept;
 ActionGroup board_calculate_rong_group(const Board&) noexcept;

@@ -15,16 +15,11 @@ bool board_can_abort(const Board&) noexcept {
     return false;
 }
 
-bool board_can_tumo(const Board& board) noexcept {
-    
-    auto patterngroup = hand_patterngroup(board.chand(board.current_player));
-    if (!patterngroup.is_nil()) {
-        YakuCombo yakucombo = board_yakucombo(board, patterngroup, board.current_player, AgariEvent::TUMO);
-        if (!yakucombo.is_nil) {
-            return true;
-        }
+void board_set_tumo_yakucombos(Board* board) noexcept {
+    auto patterngroup = hand_patterngroup(board->chand(board->current_player));
+    if (patterngroup.has_value()) {
+        board->combo(board->current_player) = board_yakucombo(*board, patterngroup.value(), board->current_player, AgariEvent::TUMO);
     }
-    return false;
 }
 
 bool board_can_flower(const Board&) noexcept {

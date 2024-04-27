@@ -10,14 +10,10 @@
 
 
 namespace riichi {
-bool PatternGroup::is_nil() const noexcept {
-    return !is_koukushi && values == nullptr;
-}
 
 bool PatternGroup::is_value_valid(uint32_t value) noexcept {
     return (value & 0x80000000) != 0 && (value & 0x000000FF) != 0x000000FF;
 }
-
 
 bool NormalArr::get_mentu_flag(Offset<uint8_t> mentu_index, uint8_t flag_index) const noexcept {
     return status[mentu_index * 4 + flag_index];
@@ -102,83 +98,8 @@ bool NormalArr::is_menzenchin() const noexcept {
     return (!get_mentu_flag(0, IS_EXPOSED) || get_mentu_flag(0, IS_CLOSED_KAN)) && (!get_mentu_flag(1, IS_EXPOSED) || get_mentu_flag(1, IS_CLOSED_KAN)) && (!get_mentu_flag(2, IS_EXPOSED) || get_mentu_flag(2, IS_CLOSED_KAN)) && (!get_mentu_flag(3, IS_EXPOSED) || get_mentu_flag(3, IS_CLOSED_KAN));
 }
 
-bool operator == (const PenaltyPoint& lhs, const PenaltyPoint& rhs) noexcept {
-    return lhs.dealer_rong == rhs.dealer_rong;
-}
 
-bool operator < (const PenaltyPoint& lhs, const PenaltyPoint& rhs) noexcept {
-    return lhs.dealer_rong < rhs.dealer_rong;;
-}
-
-
-PenaltyPoint YakuCombo::score() const noexcept {
-    int32_t yakuman = static_cast<int32_t>((yakus & bitset_make_containing<YAKUKIND_COUNT>(yakukind_to(YakuKind::KOUKUSHI_MUSOU), yakukind_to(YakuKind::PREFECT_KOUKUSHI_MUSOU), yakukind_to(YakuKind::SUUANKOU), yakukind_to(YakuKind::PREFECT_SUUANKOU), yakukind_to(YakuKind::DAISANGEN), yakukind_to(YakuKind::SHOUSUUSHII), yakukind_to(YakuKind::DAISUUSHII), yakukind_to(YakuKind::TSUUIISOU), yakukind_to(YakuKind::CHINROUTOU), yakukind_to(YakuKind::RYUUIISOU), yakukind_to(YakuKind::CHUUREN_POUTOU), yakukind_to(YakuKind::PREFECT_CHUUREN_POUTOU), yakukind_to(YakuKind::SUUANKOU), yakukind_to(YakuKind::TENHOU), yakukind_to(YakuKind::CHIIHOU))).count());
-    if (yakuman > 0) {
-        return {
-            .dealer_rong = 48000 * yakuman,
-            .dealer_tumo = 16000 * yakuman,
-            .punter_rong = 32000 * yakuman,
-            .punter_tumo_from_dealer = 16000 * yakuman,
-            .punter_tumo_from_punter = 8000 * yakuman,
-        };
-    }
-    int32_t pan = 0;
-    int32_t corrected_fu = fu;
-    pan += (yakus & bitset_make_containing<YAKUKIND_COUNT>(yakukind_to(YakuKind::RIICHI), yakukind_to(YakuKind::MENZENCHIN_TUMOHOU), yakukind_to(YakuKind::IPPATSU), yakukind_to(YakuKind::PINFU), yakukind_to(YakuKind::IIPEIKOU), yakukind_to(YakuKind::HAITEI_RAOYUE), yakukind_to(YakuKind::HOUTEI_RAOYUI), yakukind_to(YakuKind::RINSHAN_KAIHOU), yakukind_to(YakuKind::CHANKAN), yakukind_to(YakuKind::TANYAO), yakukind_to(YakuKind::YAKUHAI_PAI), yakukind_to(YakuKind::YAKUHAI_FA), yakukind_to(YakuKind::YAKUHAI_CHUNG), yakukind_to(YakuKind::YAKUHAI_JIKAZE), yakukind_to(YakuKind::YAKUHAI_BAKAZE))).count();
-    
-    pan += (yakus & bitset_make_containing<YAKUKIND_COUNT>(yakukind_to(YakuKind::DOUBLE_RIICHI), yakukind_to(YakuKind::TOITOI), yakukind_to(YakuKind::SANANKOU), yakukind_to(YakuKind::SANSHOKU_DOUKOU), yakukind_to(YakuKind::SANKANTSU), yakukind_to(YakuKind::CHIITOITSU), yakukind_to(YakuKind::HONROUTOU), yakukind_to(YakuKind::SHOUSANGEN))).count() * 2;
-    
-    pan += (yakus & bitset_make_containing<YAKUKIND_COUNT>(yakukind_to(YakuKind::CHANTAIYAO), yakukind_to(YakuKind::SANSHOKU_DOUJUN), yakukind_to(YakuKind::ITTSU))).count() * (static_cast<int32_t>(is_menzen) + 1);
-    
-    pan += (yakus & bitset_make_containing<YAKUKIND_COUNT>(yakukind_to(YakuKind::HONITSU), yakukind_to(YakuKind::JUNCHAN_TAIYAO), yakukind_to(YakuKind::RYANPEIKOU))).count() * (static_cast<int32_t>(is_menzen) + 2);
-    
-    pan += (yakus & bitset_make_containing<YAKUKIND_COUNT>(yakukind_to(YakuKind::CHINITSU))).count() * (static_cast<int32_t>(is_menzen) + 5);
-    
-    if (pan <= 0) {
-        return {};
-    }
-    if (pan == 1 && corrected_fu <= 20) {
-        corrected_fu = 30;
-    }
-    if (pan > 13) {
-        pan = 13;
-    }
-    if ((pan == 3 && corrected_fu >= 70) || (pan == 4 && corrected_fu >= 40)) {
-        pan = 5;
-    }
-    if (pan >= 5) {
-        int32_t base;
-        if (pan <= 5) {
-            base = 2000;
-        } else if (pan == 6 || pan == 7) {
-            base = 3000;
-        } else if (pan >= 8 && pan <= 10) {
-            base = 4000;
-        } else if (pan == 11 || pan == 12) {
-            base = 6000;
-        } else {
-            base = 8000;
-        }
-        return {
-            .dealer_rong = 6 * base,
-            .dealer_tumo = 2 * base,
-            .punter_rong = 4 * base,
-            .punter_tumo_from_dealer = 2 * base,
-            .punter_tumo_from_punter = base,
-        };
-    }
-    int32_t base = corrected_fu << (2 + pan);
-    return {
-        .dealer_rong = (6 * base + 99) / 100 * 100,
-        .dealer_tumo = (2 * base + 99) / 100 * 100,
-        .punter_rong = (4 * base + 99) / 100 * 100,
-        .punter_tumo_from_dealer = (2 * base + 99) / 100 * 100,
-        .punter_tumo_from_punter = (base + 99) / 100 * 100,
-    };
-}
-
-
-PatternGroup hand_patterngroup(const Hand& hand) {
+std::optional<PatternGroup> hand_patterngroup(const Hand& hand) noexcept {
     PatternGroup patterngroup = {};
     
     bool are_all_yaochuuhais = true;
@@ -206,6 +127,9 @@ PatternGroup hand_patterngroup(const Hand& hand) {
     } else {
         uint32_t key = calculate_hand_key(hand);
         patterngroup.values = find_values_from_patterns(key);
+        if (patterngroup.values == nullptr) {
+            return {};
+        }
     }
     
     return patterngroup;
@@ -213,7 +137,7 @@ PatternGroup hand_patterngroup(const Hand& hand) {
 
 
 // MARK: - Agari
-static uint8_t board_dora_count(const Board& board, Player player, bool is_riichi) {
+static uint8_t board_dora_count(const Board& board, Player player, bool is_riichi) noexcept {
     uint8_t count = board.chand(player).count(Tile::M5R) + board.chand(player).count(Tile::S5R) + board.chand(player).count(Tile::P5R);
     
     for (uint8_t i = 0; i < board.mountain.dora_curr; i++) {
@@ -230,7 +154,7 @@ static uint8_t board_dora_count(const Board& board, Player player, bool is_riich
     return count;
 }
 
-static Arrangement arrangement_make(uint32_t value, const Board& board, Player player, Tile trgtile) {
+static Arrangement arrangement_make(uint32_t value, const Board& board, Player player, Tile trgtile) noexcept {
     
     if ((value & 0x01000000) != 0) {
         auto arrangement = ChiitoitsuArr();
@@ -345,7 +269,7 @@ static Arrangement arrangement_make(uint32_t value, const Board& board, Player p
     return arrangement;
 }
 
-static YakuCombo calculate_kokushi_yakucombo(const Board& board, Tile trgtile, Player player, AgariEvent agarievent) {
+static YakuCombo calculate_kokushi_yakucombo(const Board& board, Tile trgtile, Player player, AgariEvent agarievent) noexcept {
     YakuCombo yakucombo;
     auto arrangement = KoukushiArr();
     arrangement.trgtile = trgtile;
@@ -362,7 +286,6 @@ static YakuCombo calculate_kokushi_yakucombo(const Board& board, Tile trgtile, P
         }
     }
     
-    yakucombo.is_nil = false;
     yakucombo.yakus = arrangement.yakus;
     yakucombo.is_menzen = true;
     yakucombo.fu = 0;
@@ -370,7 +293,7 @@ static YakuCombo calculate_kokushi_yakucombo(const Board& board, Tile trgtile, P
     return yakucombo;
 }
 
-static YakuCombo calculate_chuuren_yakucombo(const Board& board, ChuurenArr* arrangement, Player player, AgariEvent agarievent) {
+static YakuCombo calculate_chuuren_yakucombo(const Board& board, ChuurenArr* arrangement, Player player, AgariEvent agarievent) noexcept {
     YakuCombo yakucombo;
     arrangement->yakus.set(yakukind_to(YakuKind::CHUUREN_POUTOU));
     
@@ -385,7 +308,6 @@ static YakuCombo calculate_chuuren_yakucombo(const Board& board, ChuurenArr* arr
         }
     }
     
-    yakucombo.is_nil = false;
     yakucombo.yakus = arrangement->yakus;
     yakucombo.is_menzen = true;
     yakucombo.fu = 0;
@@ -393,7 +315,7 @@ static YakuCombo calculate_chuuren_yakucombo(const Board& board, ChuurenArr* arr
     return yakucombo;
 }
 
-static YakuCombo calculate_chiitoitsu_yakucombo(const Board& board, ChiitoitsuArr* arrangement, Player player, AgariEvent agarievent) {
+static YakuCombo calculate_chiitoitsu_yakucombo(const Board& board, ChiitoitsuArr* arrangement, Player player, AgariEvent agarievent) noexcept {
     YakuCombo yakucombo;
     arrangement->yakus.set(yakukind_to(YakuKind::CHIITOITSU));
     
@@ -446,7 +368,6 @@ static YakuCombo calculate_chiitoitsu_yakucombo(const Board& board, ChiitoitsuAr
         arrangement->yakus.set(yakukind_to(YakuKind::HONITSU));
     }
     
-    yakucombo.is_nil = false;
     yakucombo.yakus = arrangement->yakus;
     yakucombo.is_menzen = true;
     yakucombo.fu = 25;
@@ -454,7 +375,7 @@ static YakuCombo calculate_chiitoitsu_yakucombo(const Board& board, ChiitoitsuAr
     return yakucombo;
 }
 
-static YakuCombo calculate_normal_yakucombo(const Board& board, NormalArr* arrangement, Player player, AgariEvent agarievent, uint32_t value) {
+static std::optional<YakuCombo> calculate_normal_yakucombo(const Board& board, NormalArr* arrangement, Player player, AgariEvent agarievent, uint32_t value) noexcept {
     YakuCombo yakucombo;
     
     const bool is_menzen = arrangement->is_menzenchin();
@@ -823,6 +744,10 @@ static YakuCombo calculate_normal_yakucombo(const Board& board, NormalArr* arran
         }
     }
     
+    if (arrangement->yakus.none()) {
+        return {};
+    }
+    
     yakucombo.fu = 20;
     for (uint8_t i = 0; i < 4; i++) {
         if (!arrangement->get_mentu_flag(i, NormalArr::IS_SHUNTU)) {
@@ -863,7 +788,7 @@ static YakuCombo calculate_normal_yakucombo(const Board& board, NormalArr* arran
     }
     yakucombo.fu = (yakucombo.fu + 9) / 10 * 10;
     
-    yakucombo.is_nil = arrangement->yakus.none();
+
     yakucombo.yakus = arrangement->yakus;
     yakucombo.is_menzen = is_menzen;
     yakucombo.dora_count = board_dora_count(board, player, arrangement->yakus[yakukind_to(YakuKind::RIICHI)] || arrangement->yakus[yakukind_to(YakuKind::DOUBLE_RIICHI)]);
@@ -871,8 +796,8 @@ static YakuCombo calculate_normal_yakucombo(const Board& board, NormalArr* arran
 }
 
 
-YakuCombo board_yakucombo(const Board& board, const PatternGroup& patterngroup, Player player, AgariEvent agarievent) {
-    YakuCombo yakucombo;
+std::optional<YakuCombo> board_yakucombo(const Board& board, const PatternGroup& patterngroup, Player player, AgariEvent agarievent) noexcept {
+    std::optional<YakuCombo> yakucombo = {};
     
     Tile trgtile;
     switch (agarievent) {
@@ -902,8 +827,9 @@ YakuCombo board_yakucombo(const Board& board, const PatternGroup& patterngroup, 
         } else if (auto* chuuren_arrangement = std::get_if<ChuurenArr>(&arrangement)) {
             return calculate_chuuren_yakucombo(board, chuuren_arrangement, player, agarievent);
         } else if (auto* normal_arrangement = std::get_if<NormalArr>(&arrangement)) {
-            auto new_yakucombo = calculate_normal_yakucombo(board, normal_arrangement, player, agarievent, patterngroup.values[i]);
-            if (yakucombo.is_nil || yakucombo.score() < new_yakucombo.score()) {
+            if (!yakucombo.has_value()) {
+                yakucombo = calculate_normal_yakucombo(board, normal_arrangement, player, agarievent, patterngroup.values[i]);
+            } else if (auto new_yakucombo = calculate_normal_yakucombo(board, normal_arrangement, player, agarievent, patterngroup.values[i]); new_yakucombo.has_value() && yakucombo.value().score() < new_yakucombo.value().score()) {
                 yakucombo = new_yakucombo;
             }
         }

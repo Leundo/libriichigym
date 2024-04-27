@@ -103,7 +103,8 @@ ActionGroup Board::request() noexcept {
                 break;
             }
             case Stage::TUMO: {
-                if (board_can_tumo(*this)) {
+                board_set_tumo_yakucombos(this);
+                if (ccombo(current_player).has_value()) {
                     group.set(current_player, hold_tile, ActionKind::AGARI);
                     return group;
                 } else {
