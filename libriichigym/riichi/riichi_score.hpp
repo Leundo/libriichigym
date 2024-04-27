@@ -75,6 +75,8 @@ enum class YakuKind: uint8_t {
     CHIIHOU = 44,
 };
 
+constexpr uint8_t YAKUKIND_COUNT = 45;
+
 #define yakukind_to(yakukind)\
 (static_cast<uint8_t>(yakukind))
 
@@ -96,25 +98,25 @@ typedef struct PatternGroup {
 } PatternGroup;
 
 typedef struct ChiitoitsuArr {
-    std::bitset<64> yakus = {};
+    std::bitset<YAKUKIND_COUNT> yakus = {};
     Tile pairs[7];
     Tile trgtile;
 } ChiitoitsuArr;
 
 typedef struct KoukushiArr {
-    std::bitset<64> yakus = {};
+    std::bitset<YAKUKIND_COUNT> yakus = {};
     Tile pair;
     Tile trgtile;
 } KoukushiArr;
 
 typedef struct ChuurenArr {
-    std::bitset<64> yakus = {};
+    std::bitset<YAKUKIND_COUNT> yakus = {};
     Tile xtratile;
     Tile trgtile;
 } ChuurenArr;
 
 typedef struct NormalArr {
-    std::bitset<64> yakus = {};
+    std::bitset<YAKUKIND_COUNT> yakus = {};
     std::bitset<21> status = {};
     Tile mentus[4];
     Tile pair;
@@ -138,8 +140,14 @@ typedef struct NormalArr {
     
     uint8_t shuntu_count() const noexcept;
     uint8_t koutu_count() const noexcept;
-    uint8_t hidden_koutu_count() const noexcept;
+//    uint8_t hidden_koutu_count() const noexcept;
     uint8_t kantu_count() const noexcept;
+    
+    std::bitset<4> is_hidden_koutus() const noexcept;
+    
+    bool is_pair_danki() const noexcept;
+    bool is_mentu_kanchan(Offset<uint8_t>) const noexcept;
+    bool is_any_mentu_kanchan() const noexcept;
     
     bool is_mentu_ryanmen(Offset<uint8_t>) const noexcept;
     bool is_any_mentu_ryanmen() const noexcept;
@@ -159,8 +167,8 @@ struct PenaltyPoint {
     int32_t dealer_rong = 0;
     int32_t dealer_tumo = 0;
     int32_t punter_rong = 0;
-    int32_t punter_tumo_from_punter = 0;
     int32_t punter_tumo_from_dealer = 0;
+    int32_t punter_tumo_from_punter = 0;
 };
 
 bool operator == (const PenaltyPoint& lhs, const PenaltyPoint& rhs) noexcept;
@@ -172,9 +180,10 @@ public:
     YakuCombo() noexcept = default;
     ~YakuCombo() noexcept = default;
     
-    std::bitset<64> yakus;
+    std::bitset<YAKUKIND_COUNT> yakus;
     bool is_nil;
     bool is_menzen;
+    uint8_t fu;
     uint8_t dora_count;
         
     PenaltyPoint score() const noexcept;

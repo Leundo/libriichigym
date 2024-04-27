@@ -139,8 +139,12 @@ bool tile_is_ji(Tile tile) noexcept {
     return static_cast<uint8_t>(tile) >= static_cast<uint8_t>(Tile::E) && static_cast<uint8_t>(tile) <= static_cast<uint8_t>(Tile::C);
 }
 
+bool tile_is_sangen(Tile tile) noexcept {
+    return static_cast<uint8_t>(tile) >= static_cast<uint8_t>(Tile::P) && static_cast<uint8_t>(tile) <= static_cast<uint8_t>(Tile::C);
+}
+
 bool tile_is_kaze(Tile tile) noexcept {
-    return static_cast<uint8_t>(tile) >= static_cast<uint8_t>(Tile::E) && static_cast<uint8_t>(tile) <= static_cast<uint8_t>(Tile::N);;
+    return static_cast<uint8_t>(tile) >= static_cast<uint8_t>(Tile::E) && static_cast<uint8_t>(tile) <= static_cast<uint8_t>(Tile::N);
 }
 
 bool tile_is_suu(Tile tile) noexcept {

@@ -51,22 +51,43 @@ uint8_t NormalArr::koutu_count() const noexcept {
     return 4 - shuntu_count();
 }
 
-uint8_t NormalArr::hidden_koutu_count() const noexcept {
+
+uint8_t NormalArr::kantu_count() const noexcept {
+    return static_cast<uint8_t>(get_mentu_flag(0, IS_KAN)) + static_cast<uint8_t>(get_mentu_flag(1, IS_KAN)) + static_cast<uint8_t>(get_mentu_flag(2, IS_KAN)) + static_cast<uint8_t>(get_mentu_flag(3, IS_KAN));
+}
+
+std::bitset<4> NormalArr::is_hidden_koutus() const noexcept {
+    std::bitset<4> result = 0;
     bool could_avoid_koutu_combinded = get_pair_combinable();
-    uint8_t koutu_count = 0;
+    uint8_t draftee_index = 0;
     
     for (uint8_t i = 0; i < 4; i++) {
         if (get_mentu_flag(i, IS_SHUNTU) && get_mentu_combinable(i)) {
             could_avoid_koutu_combinded = true;
         } else if (!get_mentu_flag(i, IS_SHUNTU) && (!get_mentu_flag(i, IS_EXPOSED) || get_mentu_flag(i, IS_CLOSED_KAN))) {
-            koutu_count += 1;
+            result.set(i);
+            if (tile_downgrade(trgtile) == mentus[i]) {
+                draftee_index = i;
+            }
         }
     }
-    return koutu_count - static_cast<uint8_t>(!could_avoid_koutu_combinded);
+    if (!could_avoid_koutu_combinded) {
+        result.reset(draftee_index);
+    }
+    return result;
 }
 
-uint8_t NormalArr::kantu_count() const noexcept {
-    return static_cast<uint8_t>(get_mentu_flag(0, IS_KAN)) + static_cast<uint8_t>(get_mentu_flag(1, IS_KAN)) + static_cast<uint8_t>(get_mentu_flag(2, IS_KAN)) + static_cast<uint8_t>(get_mentu_flag(3, IS_KAN));
+
+bool NormalArr::is_pair_danki() const noexcept {
+    return get_pair_combinable();
+}
+
+bool NormalArr::is_mentu_kanchan(Offset<uint8_t> index) const noexcept {
+    return get_mentu_combinable(index) && get_mentu_flag(index, IS_SHUNTU) && tile_downgrade(trgtile) == tile_add(mentus[index], 1);
+}
+
+bool NormalArr::is_any_mentu_kanchan() const noexcept {
+    return is_mentu_kanchan(0) || is_mentu_kanchan(1) || is_mentu_kanchan(2) || is_mentu_kanchan(3);
 }
 
 bool NormalArr::is_mentu_ryanmen(Offset<uint8_t> index) const noexcept {
@@ -91,6 +112,16 @@ bool operator < (const PenaltyPoint& lhs, const PenaltyPoint& rhs) noexcept {
 
 
 PenaltyPoint YakuCombo::score() const noexcept {
+    uint8_t yakuman_count = (yakus | bitset_make_containing<YAKUKIND_COUNT>(yakukind_to(YakuKind::KOUKUSHI_MUSOU), yakukind_to(YakuKind::PREFECT_KOUKUSHI_MUSOU), yakukind_to(YakuKind::SUUANKOU), yakukind_to(YakuKind::PREFECT_SUUANKOU), yakukind_to(YakuKind::DAISANGEN), yakukind_to(YakuKind::SHOUSUUSHII), yakukind_to(YakuKind::DAISUUSHII), yakukind_to(YakuKind::TSUUIISOU), yakukind_to(YakuKind::CHINROUTOU), yakukind_to(YakuKind::RYUUIISOU), yakukind_to(YakuKind::CHUUREN_POUTOU), yakukind_to(YakuKind::PREFECT_CHUUREN_POUTOU), yakukind_to(YakuKind::SUUANKOU), yakukind_to(YakuKind::TENHOU), yakukind_to(YakuKind::CHIIHOU))).count();
+    if (yakuman_count > 0) {
+        return {
+            .dealer_rong = 48000 * yakuman_count,
+            .dealer_tumo = 16000 * yakuman_count,
+            .punter_rong = 32000 * yakuman_count,
+            .punter_tumo_from_dealer = 16000 * yakuman_count,
+            .punter_tumo_from_punter = 8000 * yakuman_count,
+        };
+    }
     return {};
 }
 
@@ -282,6 +313,7 @@ static YakuCombo calculate_kokushi_yakucombo(const Board& board, Tile trgtile, P
     yakucombo.is_nil = false;
     yakucombo.yakus = arrangement.yakus;
     yakucombo.is_menzen = true;
+    yakucombo.fu = 0;
     yakucombo.dora_count = board_dora_count(board, player, false);
     return yakucombo;
 }
@@ -304,6 +336,7 @@ static YakuCombo calculate_chuuren_yakucombo(const Board& board, ChuurenArr* arr
     yakucombo.is_nil = false;
     yakucombo.yakus = arrangement->yakus;
     yakucombo.is_menzen = true;
+    yakucombo.fu = 0;
     yakucombo.dora_count = board_dora_count(board, player, false);
     return yakucombo;
 }
@@ -364,6 +397,7 @@ static YakuCombo calculate_chiitoitsu_yakucombo(const Board& board, ChiitoitsuAr
     yakucombo.is_nil = false;
     yakucombo.yakus = arrangement->yakus;
     yakucombo.is_menzen = true;
+    yakucombo.fu = 25;
     yakucombo.dora_count = board_dora_count(board, player, false);
     return yakucombo;
 }
@@ -371,14 +405,16 @@ static YakuCombo calculate_chiitoitsu_yakucombo(const Board& board, ChiitoitsuAr
 static YakuCombo calculate_normal_yakucombo(const Board& board, NormalArr* arrangement, Player player, AgariEvent agarievent, uint32_t value) {
     YakuCombo yakucombo;
     
-    bool is_menzen = arrangement->is_menzenchin();
+    const bool is_menzen = arrangement->is_menzenchin();
     yakucombo.is_menzen = is_menzen;
     
-    uint8_t shuntu_count = arrangement->shuntu_count();
-    uint8_t koutu_count = arrangement->koutu_count();
-    uint8_t kantu_count = arrangement->kantu_count();
-    uint8_t hidden_koutu_count = arrangement->hidden_koutu_count();
-    TileKind pair_tilekind = tile_kind(arrangement->pair);
+    const uint8_t shuntu_count = arrangement->shuntu_count();
+    const uint8_t koutu_count = arrangement->koutu_count();
+    const uint8_t kantu_count = arrangement->kantu_count();
+    const std::bitset<4> is_hidden_koutus = arrangement->is_hidden_koutus();
+    const TileKind pair_tilekind = tile_kind(arrangement->pair);
+    const Tile jikaze_tile = board.jikaze(player);
+    const Tile bakaze_tile = board.bakaze();
     
     
     // 天和 | 地和
@@ -407,7 +443,7 @@ static YakuCombo calculate_normal_yakucombo(const Board& board, NormalArr* arran
         arrangement->yakus.set(yakukind_to(YakuKind::CHANKAN));
     }
     // 門前清自摸和
-    if (agarievent == AgariEvent::TUMO && board.shrine.last_cexposed(player) == nullptr) {
+    if ((agarievent == AgariEvent::TUMO || agarievent == AgariEvent::FLOWER) && board.shrine.last_cexposed(player) == nullptr) {
         arrangement->yakus.set(yakukind_to(YakuKind::MENZENCHIN_TUMOHOU));
     }
     
@@ -535,11 +571,11 @@ static YakuCombo calculate_normal_yakucombo(const Board& board, NormalArr* arran
                         flags.set(ANY_IS_N_KOUKU);
                     }
                     
-                    if (board.jikaze(player) == key_tile) {
+                    if (jikaze_tile == key_tile) {
                         flags.set(ANY_IS_JIKAZE);
                         flags.set(ANY_IS_JIKAZE_KOUKU);
                     }
-                    if (board.bakaze() == key_tile) {
+                    if (bakaze_tile == key_tile) {
                         flags.set(ANY_IS_BAKAZE);
                         flags.set(ANY_IS_BAKAZE_KOUKU);
                     }
@@ -627,7 +663,7 @@ static YakuCombo calculate_normal_yakucombo(const Board& board, NormalArr* arran
         arrangement->yakus.set(yakukind_to(YakuKind::TOITOI));
     }
     // 三暗刻
-    if (hidden_koutu_count == 3) {
+    if (is_hidden_koutus.count() == 3) {
         arrangement->yakus.set(yakukind_to(YakuKind::SANANKOU));
     }
     // 小三元
@@ -647,7 +683,7 @@ static YakuCombo calculate_normal_yakucombo(const Board& board, NormalArr* arran
         }
     }
     // 四暗刻 | 四暗刻単騎
-    if (hidden_koutu_count == 4) {
+    if (is_hidden_koutus.count() == 4) {
         arrangement->yakus.set(yakukind_to(YakuKind::SUUANKOU));
         if (arrangement->trgtile == arrangement->pair) {
             arrangement->yakus.set(yakukind_to(YakuKind::PREFECT_SUUANKOU));
@@ -734,7 +770,45 @@ static YakuCombo calculate_normal_yakucombo(const Board& board, NormalArr* arran
             }
         }
     }
-
+    
+    yakucombo.fu = 20;
+    for (uint8_t i = 0; i < 4; i++) {
+        if (!arrangement->get_mentu_flag(i, NormalArr::IS_SHUNTU)) {
+            uint8_t base = 2;
+            if (arrangement->get_mentu_flag(i, NormalArr::IS_KAN)) {
+                base = 8;
+            }
+            if (is_hidden_koutus[i]) {
+                base *= 2;
+            }
+            if (tile_is_yaochuu(arrangement->mentus[i])) {
+                base *= 2;
+            }
+        }
+    }
+    {
+        if (tile_is_sangen(arrangement->pair)) {
+            yakucombo.fu += 2;
+        } else {
+            if (jikaze_tile == board.jikaze(player)) {
+                yakucombo.fu += 2;
+            }
+            if (bakaze_tile == board.bakaze()) {
+                yakucombo.fu += 2;
+            }
+        }
+    }
+    // Yaku affecting the type of machi:
+    // Pinfu, Sanankou
+    if (arrangement->is_pair_danki() && arrangement->is_any_mentu_kanchan()) {
+        yakucombo.fu += 2;
+    }
+    if (agarievent == AgariEvent::TUMO || agarievent == AgariEvent::FLOWER) {
+        yakucombo.fu += !arrangement->yakus[yakukind_to(YakuKind::PINFU)] ? 2 : 0;
+    } else if (is_menzen) {
+        yakucombo.fu += 10;
+    }
+    yakucombo.fu = (yakucombo.fu + 9) / 10 * 10;
     
     yakucombo.is_nil = arrangement->yakus.none();
     yakucombo.yakus = arrangement->yakus;

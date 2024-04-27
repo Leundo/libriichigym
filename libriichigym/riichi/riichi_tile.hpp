@@ -101,6 +101,7 @@ Tile tile_linear_prev(Tile) noexcept;
 
 
 bool tile_is_ji(Tile) noexcept;
+bool tile_is_sangen(Tile) noexcept;
 bool tile_is_kaze(Tile) noexcept;
 bool tile_is_suu(Tile) noexcept;
 bool tile_is_yaochuu(Tile) noexcept;
